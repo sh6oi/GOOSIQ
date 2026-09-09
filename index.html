@@ -67,6 +67,253 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
 }
 @media(max-width:390px){.fashion-nav{grid-template-columns:42px 1fr 82px}.fashion-logo span{font-size:18px}.editorial-copy h1{font-size:37px}.hero-visual{min-height:58vh}.products{gap:6px}.product-title{font-size:10px}.new-price{font-size:11px}.service-strip b{font-size:16px}.service-strip span{font-size:6.5px}}
 
+
+/* ===== GOOSIQ UI refinements ===== */
+.premium-cart{
+  position:relative;
+  min-width:104px;
+  height:46px;
+  padding:0 14px 0 12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:1px solid rgba(96,42,66,.14);
+  border-radius:999px;
+  background:linear-gradient(180deg,#ffffff 0%,#fff8fb 100%);
+  color:#5d2941;
+  box-shadow:0 8px 24px rgba(77,28,51,.08);
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.premium-cart:hover{
+  transform:translateY(-2px);
+  border-color:rgba(123,41,77,.28);
+  box-shadow:0 12px 28px rgba(77,28,51,.13);
+}
+.premium-cart .cart-icon{
+  width:27px;height:27px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#7b294d;color:#fff;
+  font-size:18px;line-height:1;
+  transform:rotate(180deg);
+}
+.premium-cart .cart-label{font-weight:800;font-size:13px}
+.premium-cart .badge{
+  position:absolute;
+  top:-6px;left:-4px;
+  min-width:21px;height:21px;
+  border:2px solid #fff;
+  box-shadow:0 4px 10px rgba(80,26,49,.18);
+}
+.account-logout-btn{
+  width:100%;
+  margin-top:4px;
+  min-height:50px;
+  border:1px solid #ead5de;
+  border-radius:14px;
+  background:#fff8fa;
+  color:#8b294e;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  transition:.2s ease;
+}
+.account-logout-btn:hover{
+  background:#8b294e;
+  color:#fff;
+  border-color:#8b294e;
+}
+.logout-icon{font-size:20px}
+@media(max-width:560px){
+  .premium-cart{min-width:46px;width:46px;padding:0;border-radius:50%}
+  .premium-cart .cart-label{display:none}
+  .premium-cart .cart-icon{background:transparent;color:#7b294d;width:auto;height:auto}
+  .premium-cart .badge{top:-4px;left:-5px}
+}
+
+
+/* ===== Refined order experience ===== */
+.order-list{
+  display:grid;
+  gap:16px;
+}
+.order-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #eadde3;
+  border-radius:22px;
+  background:linear-gradient(180deg,#fff 0%,#fffafb 100%);
+  box-shadow:0 12px 34px rgba(60,26,42,.07);
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.order-card:hover{
+  transform:translateY(-2px);
+  border-color:#dfc6d1;
+  box-shadow:0 18px 40px rgba(60,26,42,.11);
+}
+.order-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  padding:18px 18px 14px;
+  border-bottom:1px solid #f1e7eb;
+}
+.order-number-wrap{
+  display:grid;
+  gap:3px;
+}
+.order-number-label{
+  color:#9a7c88;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.03em;
+}
+.order-number{
+  font-size:17px;
+  font-weight:900;
+  color:#3d2530;
+}
+.order-date{
+  color:#9a7c88;
+  font-size:11px;
+  margin-top:3px;
+}
+.order-status-beauty{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  max-width:260px;
+  padding:8px 11px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+  line-height:1.5;
+  border:1px solid transparent;
+}
+.order-status-beauty::before{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:currentColor;
+  box-shadow:0 0 0 4px rgba(0,0,0,.035);
+  flex:0 0 auto;
+}
+.order-status-processing{color:#9a6400;background:#fff7df;border-color:#f3dfaa}
+.order-status-purchased{color:#5f3a88;background:#f7f0ff;border-color:#e8d9f8}
+.order-status-preparing{color:#985027;background:#fff2e9;border-color:#f4d5c1}
+.order-status-shipping{color:#225f8c;background:#eaf6ff;border-color:#cee8fa}
+.order-status-arrived{color:#176b4d;background:#e9f8f1;border-color:#c9ebdc}
+.order-status-cancelled{color:#a52b25;background:#fff0ef;border-color:#f1cbc8}
+
+.order-products-preview{
+  display:flex;
+  gap:8px;
+  padding:15px 18px 4px;
+  overflow:hidden;
+}
+.order-product-thumb{
+  width:58px;
+  height:72px;
+  flex:0 0 58px;
+  border-radius:12px;
+  object-fit:cover;
+  background:#f4edf0;
+  border:1px solid #eadde3;
+}
+.order-more-thumb{
+  width:58px;
+  height:72px;
+  flex:0 0 58px;
+  border-radius:12px;
+  background:#f6edf1;
+  color:#7b294d;
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:900;
+}
+.order-info-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  padding:14px 18px;
+}
+.order-info-box{
+  padding:11px 12px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid #f0e4e9;
+}
+.order-info-box span{
+  display:block;
+  color:#9a7c88;
+  font-size:10px;
+  margin-bottom:3px;
+}
+.order-info-box b{
+  display:block;
+  color:#39232d;
+  font-size:13px;
+}
+.order-progress{
+  padding:5px 18px 16px;
+}
+.order-progress-track{
+  height:5px;
+  border-radius:999px;
+  background:#eee3e8;
+  overflow:hidden;
+}
+.order-progress-fill{
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,#7b294d,#cb6f96);
+  transition:width .35s ease;
+}
+.order-progress-labels{
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+  margin-top:7px;
+  color:#a38994;
+  font-size:9px;
+}
+.order-card-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px 18px 17px;
+}
+.order-view-btn{
+  border:1px solid #dfcbd4;
+  background:#fff;
+  color:#71304d;
+  border-radius:12px;
+  padding:9px 14px;
+  font-size:12px;
+  font-weight:900;
+}
+.order-view-btn:hover{background:#7b294d;color:#fff;border-color:#7b294d}
+.order-payment-note{
+  color:#927984;
+  font-size:10px;
+}
+@media(max-width:620px){
+  .order-card-head{padding:15px;align-items:flex-start}
+  .order-status-beauty{max-width:170px;padding:7px 9px;font-size:9.5px}
+  .order-products-preview{padding:13px 15px 2px}
+  .order-info-grid{grid-template-columns:1fr 1fr;padding:12px 15px}
+  .order-info-grid .order-info-box:last-child{grid-column:1/-1}
+  .order-progress{padding:4px 15px 13px}
+  .order-progress-labels{font-size:8px}
+  .order-card-footer{padding:12px 15px 15px}
+}
+
 </style>
 </head>
 <body>
@@ -108,7 +355,9 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
           <div class="field"><label>رقم الهاتف الأساسي</label><input id="regPhone1" class="input" required maxlength="11" inputmode="numeric" placeholder="077xxxxxxxx"></div>
           <div class="field"><label>رقم إضافي (اختياري)</label><input id="regPhone2" class="input" maxlength="11" inputmode="numeric" placeholder="07xxxxxxxxx"></div>
         </div>
-        <div class="field"><label>اسم المستخدم</label><input id="regUsername" class="input" required minlength="5" placeholder="مثال: sara25"></div>
+        <div class="field"><label>اسم المستخدم</label><input id="regUsername" class="input" required minlength="5" placeholder="مثال: sara25">
+          <div class="hint">5 أحرف أو أرقام على الأقل، ويجب أن يحتوي على حرف إنجليزي. نطاق @goosiq.com مخصص للإدارة فقط.</div>
+        </div>
         <div class="grid2">
           <div class="field"><label>المحافظة</label><select id="regProvince" class="input" required></select></div>
           <div class="field"><label>عنوان التوصيل</label><input id="regAddress" class="input" required placeholder="المنطقة، الشارع، أقرب نقطة دالة"></div>
@@ -134,7 +383,11 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
     <div class="nav-cluster nav-left">
       <button class="icon-nav" onclick="focusStoreSearch()" aria-label="بحث">⌕</button>
       <button id="accountNavBtn" class="icon-nav account-nav" onclick="handleAccountClick()" aria-label="الحساب">♙</button>
-      <button class="cart-nav" onclick="openCart()"><span>السلة</span><b id="cartBadge" class="badge">0</b></button>
+      <button class="cart-nav premium-cart" onclick="openCart()" aria-label="سلة التسوق">
+        <span class="cart-icon">⌑</span>
+        <span class="cart-label">السلة</span>
+        <b id="cartBadge" class="badge">0</b>
+      </button>
     </div>
   </div>
 </header>
@@ -166,7 +419,6 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
           <p>تشكيلة ناعمة من ملابس النوم والـLoungewear اختيرت لتجمع بين الراحة، الأنوثة، والتفاصيل التي تحبينها.</p>
           <div class="hero-actions">
             <button class="btn fashion-primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">اكتشفي جديدنا</button>
-            <button class="text-link" onclick="openAuth('register')">انضمي إلى GOOSIQ <span>←</span></button>
           </div>
           <div class="service-strip">
             <div><b>25%</b><span>عربون الطلب</span></div>
@@ -209,6 +461,10 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
           <div class="field"><label>عنوان التوصيل</label><input id="profileAddress" class="input" placeholder="المنطقة، الشارع، وأقرب نقطة دالة"></div>
         </div>
         <button class="btn primary" type="submit">حفظ بياناتي</button>
+        <button class="btn account-logout-btn" type="button" onclick="logout()">
+          <span class="logout-icon">↪</span>
+          تسجيل الخروج
+        </button>
       </form>
     </div>
     <div id="ordersPanel" class="panel hidden">
@@ -223,30 +479,8 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
 <header class="header"><div class="wrap nav">
   <div class="logo"><span class="logo-mark">G</span> GOOSIQ ADMIN</div>
   <div class="navlinks">
-      <button onclick="goHome()">الرئيسية</button>
-
-      <button id="guestLoginBtn" onclick="openAuthModal('login')" class="secondary">
-        <span class="txt">تسجيل الدخول</span>
-      </button>
-
-      <button id="guestRegisterBtn" onclick="openAuthModal('register')" class="primary">
-        <span class="txt">إنشاء حساب</span>
-      </button>
-
-      <button id="userOrdersBtn" class="hidden" onclick="openOrders()">
-        <span class="txt">طلباتي</span>
-      </button>
-
-      <button id="userProfileBtn" class="hidden" onclick="openProfile()">
-        <span class="txt">حسابي</span>
-      </button>
-
-      <button id="cartNavBtn" onclick="openCart()">🛒 <span class="txt">السلة</span> <span id="cartBadge" class="badge">0</span></button>
-
-      <button id="userLogoutBtn" onclick="logout()" class="secondary hidden">
-        <span class="txt">تسجيل الخروج</span>
-      </button>
-    </div>
+    <button onclick="logout()" class="secondary">تسجيل الخروج</button>
+  </div>
 </div></header>
 
 <section class="section"><div class="wrap admin-layout">
@@ -354,6 +588,12 @@ const normPhone = s=>String(s||"").replace(/\D/g,"");
 const money = n=>Number(n||0).toLocaleString("en-US");
 const uid = ()=>auth.currentUser?.uid;
 
+function isAdminAccount(){
+  const email = String(auth.currentUser?.email || "").toLowerCase();
+  return email.endsWith(ADMIN_DOMAIN);
+}
+
+
 function updateStoreAuthButtons(){
   const loggedIn = !!currentUser && !guestMode;
   const ids = {
@@ -459,10 +699,19 @@ $("registerForm").addEventListener("submit",async(e)=>{
   if(!validateName(name)) return toast("الاسم يجب أن يكون ثلاثياً على الأقل","bad");
   if(!validatePhone(phone1)) return toast("رقم الهاتف الأساسي غير صحيح","bad");
   if(phone2 && !validatePhone(phone2)) return toast("رقم إضافي غير صحيح","bad");
-  if(!validateUsername(username)) return toast("اسم المستخدم 5 أحرف/أرقام على الأقل ويجب أن يحتوي حرفاً إنجليزياً","bad");
+
+  // نطاق GOOSIQ مخصص حصراً لحسابات الإدارة ولا يمكن استخدامه في حسابات الزبائن.
+  if(email.endsWith(ADMIN_DOMAIN))
+    return toast("لا يمكن استخدام بريد ينتهي بـ @goosiq.com في حساب المستخدم","bad");
+
+  if(username.endsWith(ADMIN_DOMAIN) || username.includes("@goosiq.com"))
+    return toast("لا يمكن استخدام @goosiq.com ضمن اسم المستخدم","bad");
+
+  if(!validateUsername(username))
+    return toast("اسم المستخدم 5 أحرف/أرقام على الأقل ويجب أن يحتوي حرفاً إنجليزياً","bad");
+
   if(!province) return toast("يرجى اختيار المحافظة","bad");
   if(address.length<4) return toast("يرجى إدخال عنوان واضح للتوصيل","bad");
-  if(email.endsWith(ADMIN_DOMAIN)) return toast("نطاق @goosiq.com مخصص لحسابات الإدارة","bad");
   try{
     if(await indexExists("phoneIndex",phone1)) return toast("رقم الهاتف مسجل سابقاً","bad");
     if(await indexExists("usernameIndex",username)) return toast("اسم المستخدم مسجل سابقاً","bad");
@@ -525,7 +774,8 @@ onAuthStateChanged(auth,async user=>{
   guestMode=false; currentUser=user;
   const isAdmin=(user.email||"").toLowerCase().endsWith(ADMIN_DOMAIN);
   if(isAdmin){
-    showPage("admin"); subscribeAdmin();
+    showPage("admin");
+    subscribeAdmin();
   }else{
     const s=await get(ref(db,`users/${user.uid}`));
     currentProfile=s.val()||null;
@@ -658,6 +908,30 @@ window.openCheckout=()=>{
   $("checkoutForm").addEventListener("submit",async e=>{ e.preventDefault(); await placeOrder(); });
 };
 
+
+function getOrderStatusMeta(status){
+  const map = {
+    "قيد المعالجة": {cls:"order-status-processing", label:"قيد المعالجة", step:1},
+    "تم الشراء": {cls:"order-status-purchased", label:"تم الشراء", step:2},
+    "قيد التجهيز": {cls:"order-status-preparing", label:"قيد التجهيز", step:3},
+    "قيد الشحن": {cls:"order-status-shipping", label:"قيد الشحن", step:4},
+    "وصل طلبك الى العراق وسوف يصلك خلال مدة لا تتجاوز 3 أيام": {cls:"order-status-arrived", label:"وصل إلى العراق", step:5},
+    "ملغي": {cls:"order-status-cancelled", label:"تم إلغاء الطلب", step:0}
+  };
+  return map[status] || {cls:"order-status-processing",label:status||"قيد المعالجة",step:1};
+}
+
+function orderProgressPercent(status){
+  const meta = getOrderStatusMeta(status);
+  if(meta.step === 0) return 0;
+  return Math.max(8, Math.min(100, meta.step * 20));
+}
+
+function renderOrderStatus(status){
+  const meta = getOrderStatusMeta(status);
+  return `<span class="order-status-beauty ${meta.cls}" title="${esc(status||"")}">${esc(meta.label)}</span>`;
+}
+
 function generateOrderNumber(){ return String(Date.now()).slice(-10)+String(Math.floor(10+Math.random()*89)); }
 
 async function placeOrder(){
@@ -677,10 +951,20 @@ async function placeOrder(){
   updates[`orders/${orderId}`]=order;
   updates[`userOrders/${uid()}/${orderId}`]=true;
   updates[`users/${uid()}/province`]=province; updates[`users/${uid()}/address`]=address; updates[`users/${uid()}/phone2`]=phone2;
-  await update(ref(db),updates);
-  await remove(ref(db,`carts/${uid()}`));
-  currentProfile={...currentProfile,province,address,phone2};
-  openModal("طلبكِ أصبح معنا 🤍",`
+  try{
+    await update(ref(db),updates);
+
+    // تحقق إضافي بأن الطلب تم حفظه فعلياً قبل مسح السلة
+    const savedOrder = await get(ref(db,`orders/${orderId}`));
+    if(!savedOrder.exists()) throw new Error("ORDER_NOT_SAVED");
+
+    await remove(ref(db,`carts/${uid()}`));
+    currentProfile={...currentProfile,province,address,phone2};
+
+    // تحديث قائمة الطلبات إذا كانت مفتوحة
+    if(!$("ordersPanel")?.classList.contains("hidden")) loadMyOrders();
+
+    openModal("طلبكِ أصبح معنا 🤍",`
     <div style="text-align:center;padding:24px">
       <div class="logo-mark" style="margin:auto;width:62px;height:62px;font-size:28px">✓</div>
       <h2>شكراً لأنكِ اخترتِ GOOSIQ</h2>
@@ -689,6 +973,10 @@ async function placeOrder(){
       <div style="margin-top:10px" class="pill">العربون المطلوب: ${money(deposit)} د.ع</div>
       <br><button class="btn primary" style="margin-top:18px" onclick="closeModal();openOrders()">شاهدي تفاصيل طلبي</button>
     </div>`);
+  }catch(err){
+    console.error("placeOrder:",err);
+    toast("تعذر حفظ الطلب في قاعدة البيانات. لم يتم حذف محتويات السلة.","bad");
+  }
 }
 
 function fillProvinces(){
@@ -722,18 +1010,147 @@ window.showAccountPanel=p=>{
   $("menuProfile").classList.toggle("active",p==="profile"); $("menuOrders").classList.toggle("active",p==="orders");
 };
 async function loadMyOrders(){
-  const s=await get(query(ref(db,"orders"),orderByChild("userId"),equalTo(uid())));
-  const arr=Object.values(s.val()||{}).sort((a,b)=>b.createdAt-a.createdAt);
-  $("myOrders").innerHTML=arr.length?arr.map(o=>`
-    <div class="panel" style="margin-bottom:12px;cursor:pointer" onclick="showOrderDetails('${o.id}',false)">
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><b>#${esc(o.orderNumber)}</b><div class="hint">${new Date(o.createdAt).toLocaleString("ar-IQ")}</div></div><span class="status">${esc(o.status)}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-top:12px"><span>${o.items?.length||0} منتج</span><b>${money(o.total)} د.ع</b></div>
-    </div>`).join(""):`<div class="empty">لا توجد طلبات حتى الآن.</div>`;
+  const box = $("myOrders");
+  box.innerHTML = `<div class="empty">جاري ترتيب طلباتكِ...</div>`;
+
+  try{
+    const indexSnap = await get(ref(db,`userOrders/${uid()}`));
+    const indexData = indexSnap.val() || {};
+    let ids = Object.keys(indexData);
+
+    // دعم الطلبات القديمة: إذا كان userOrders ناقصاً، نجرب استعلام الطلبات
+    // ونضم أي طلب سابق يخص الحساب الحالي.
+    try{
+      const oldSnap = await get(query(ref(db,"orders"),orderByChild("userId"),equalTo(uid())));
+      const oldOrders = oldSnap.val() || {};
+      ids = [...new Set([...ids, ...Object.keys(oldOrders)])];
+    }catch(oldErr){
+      console.info("Legacy orders query skipped by current rules:", oldErr?.message || oldErr);
+    }
+
+    if(!ids.length){
+      box.innerHTML = `<div class="empty">لا توجد طلبات حتى الآن.</div>`;
+      return;
+    }
+
+    const snaps = await Promise.all(ids.map(orderId=>get(ref(db,`orders/${orderId}`))));
+    const arr = snaps
+      .filter(s=>s.exists())
+      .map(s=>s.val())
+      .filter(o=>o && o.userId===uid())
+      .sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
+
+    if(!arr.length){
+      box.innerHTML = `<div class="empty">لا توجد طلبات حتى الآن.</div>`;
+      return;
+    }
+
+    box.innerHTML = `<div class="order-list">${arr.map(o=>{
+      const items = Array.isArray(o.items) ? o.items : Object.values(o.items||{});
+      const thumbs = items.slice(0,4).map(x=>
+        `<img class="order-product-thumb" src="${esc(x.image||"")}" alt="${esc(x.name||"منتج")}" onerror="this.style.display='none'">`
+      ).join("");
+      const more = items.length>4 ? `<div class="order-more-thumb">+${items.length-4}</div>` : "";
+      const deliveryText = Number(o.delivery||0)===0 ? "مجاني" : `${money(o.delivery)} د.ع`;
+      const progress = orderProgressPercent(o.status);
+
+      return `
+        <article class="order-card">
+          <div class="order-card-head">
+            <div class="order-number-wrap">
+              <span class="order-number-label">رقم الطلب</span>
+              <b class="order-number">#${esc(o.orderNumber||o.id||"")}</b>
+              <span class="order-date">${new Date(Number(o.createdAt||0)).toLocaleString("ar-IQ")}</span>
+            </div>
+            ${renderOrderStatus(o.status)}
+          </div>
+
+          ${items.length ? `<div class="order-products-preview">${thumbs}${more}</div>` : ""}
+
+          <div class="order-info-grid">
+            <div class="order-info-box">
+              <span>قيمة الطلب</span>
+              <b>${money(o.total)} د.ع</b>
+            </div>
+            <div class="order-info-box">
+              <span>العربون المطلوب</span>
+              <b>${money(o.depositRequired||0)} د.ع</b>
+            </div>
+            <div class="order-info-box">
+              <span>التوصيل</span>
+              <b>${deliveryText}</b>
+            </div>
+          </div>
+
+          ${o.status!=="ملغي" ? `
+          <div class="order-progress">
+            <div class="order-progress-track"><div class="order-progress-fill" style="width:${progress}%"></div></div>
+            <div class="order-progress-labels">
+              <span>استلام</span><span>شراء</span><span>تجهيز</span><span>شحن</span><span>العراق</span>
+            </div>
+          </div>` : ""}
+
+          <div class="order-card-footer">
+            <span class="order-payment-note">${esc(o.paymentStatus||"يمكنكِ متابعة جميع تفاصيل الطلب من هنا")}</span>
+            <button class="order-view-btn" onclick="showOrderDetails('${o.id}',false)">عرض التفاصيل</button>
+          </div>
+        </article>`;
+    }).join("")}</div>`;
+
+  }catch(err){
+    console.error("loadMyOrders:",err);
+    box.innerHTML = `<div class="empty">تعذر تحميل الطلبات. يرجى إعادة المحاولة.</div>`;
+  }
 }
 
 function subscribeAdmin(){
-  onValue(ref(db,"users"),s=>{adminUsers=s.val()||{};renderAdminUsers();updateKpis();});
-  onValue(ref(db,"orders"),s=>{adminOrders=s.val()||{};renderAdminOrders();updateKpis();});
+  if($("adminUsersTable")) $("adminUsersTable").innerHTML = `<div class="empty">جاري تحميل المستخدمين...</div>`;
+  if($("adminOrdersTable")) $("adminOrdersTable").innerHTML = `<div class="empty">جاري تحميل الطلبات...</div>`;
+
+  onValue(
+    ref(db,"users"),
+    s=>{
+      adminUsers=s.val()||{};
+      renderAdminUsers();
+      updateKpis();
+    },
+    err=>{
+      console.error("Admin users read error:", err);
+      adminUsers={};
+      updateKpis();
+      if($("adminUsersTable")){
+        $("adminUsersTable").innerHTML =
+          `<div class="empty" style="color:#b42318">
+            تعذر تحميل المستخدمين من Firebase.<br>
+            <span class="hint">السبب: ${esc(err?.message||"Permission denied")}</span>
+          </div>`;
+      }
+      toast("تعذر تحميل المستخدمين: تحقق من قواعد Firebase","bad");
+    }
+  );
+
+  onValue(
+    ref(db,"orders"),
+    s=>{
+      adminOrders=s.val()||{};
+      renderAdminOrders();
+      updateKpis();
+    },
+    err=>{
+      console.error("Admin orders read error:", err);
+      adminOrders={};
+      updateKpis();
+      if($("adminOrdersTable")){
+        $("adminOrdersTable").innerHTML =
+          `<div class="empty" style="color:#b42318">
+            تعذر تحميل الطلبات من Firebase.<br>
+            <span class="hint">السبب: ${esc(err?.message||"Permission denied")}</span>
+          </div>`;
+      }
+      toast("تعذر تحميل الطلبات: تحقق من قواعد Firebase","bad");
+    }
+  );
+
   populateStatusSelects();
 }
 function populateStatusSelects(){
@@ -785,7 +1202,7 @@ window.renderAdminOrders=()=>{
   }).sort((a,b)=>sort==="new"?b.createdAt-a.createdAt:a.createdAt-b.createdAt);
   $("adminOrdersTable").innerHTML=`<div class="table-wrap"><table class="table"><thead><tr><th>رقم الطلب</th><th>الزبون</th><th>التاريخ</th><th>الإجمالي النهائي</th><th>العربون</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>
   ${arr.map(o=>`<tr><td>#${esc(o.orderNumber)}</td><td>${esc(o.customerName)}<br><span class="hint">${esc(o.phone1)}</span></td><td>${new Date(o.createdAt).toLocaleString("ar-IQ")}</td><td>${money(o.total)} د.ع</td><td>${money(o.depositRequired)} د.ع</td>
-  <td><select class="input" onchange="changeOrderStatus('${o.id}',this.value)">${ORDER_STATUSES.map(x=>`<option ${x===o.status?"selected":""}>${x}</option>`).join("")}</select></td>
+  <td><div style="display:grid;gap:7px">${renderOrderStatus(o.status)}<select class="input" onchange="changeOrderStatus('${o.id}',this.value)">${ORDER_STATUSES.map(x=>`<option ${x===o.status?"selected":""}>${x}</option>`).join("")}</select></div></td>
   <td><button class="btn secondary small" onclick="showOrderDetails('${o.id}',true)">تفاصيل</button> <button class="btn secondary small" onclick="editOrderNumber('${o.id}')">رقم الطلب</button> <button class="btn danger small" onclick="cancelOrder('${o.id}')">إلغاء</button></td></tr>`).join("")}
   </tbody></table></div>`;
 };
@@ -813,7 +1230,7 @@ window.showOrderDetails=(id,isAdmin)=>{
     openModal(`الطلب #${order.orderNumber}`,`
       <div class="grid2">
         <div class="panel"><b>بيانات التوصيل إلى بابكِ</b><p class="hint">${esc(order.customerName)}<br>${esc(order.province)} - ${esc(order.address)}<br>${esc(order.phone1)} ${order.phone2?" / "+esc(order.phone2):""}</p></div>
-        <div class="panel"><b>الحالة</b><p><span class="status">${esc(order.status)}</span></p><div class="hint">${new Date(order.createdAt).toLocaleString("ar-IQ")}</div></div>
+        <div class="panel"><b>حالة الطلب</b><p>${renderOrderStatus(order.status)}</p><div class="hint">${new Date(order.createdAt).toLocaleString("ar-IQ")}</div></div>
       </div>
       <h3>المنتجات</h3>
       <div class="cart-list">${(order.items||[]).map(x=>`<div class="cart-item"><img src="${esc(x.image||"")}"><div><b>${esc(x.name)}</b><div class="hint">اختاري القياس: ${esc(x.size||"-")} • اختاري اللون: ${esc(x.color||"-")} • الكمية: ${x.qty}</div></div><b>${money(x.unitPrice*x.qty)} د.ع</b></div>`).join("")}</div>
