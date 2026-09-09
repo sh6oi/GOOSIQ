@@ -222,7 +222,31 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
 <div id="adminApp" class="hidden">
 <header class="header"><div class="wrap nav">
   <div class="logo"><span class="logo-mark">G</span> GOOSIQ ADMIN</div>
-  <div class="navlinks"><button onclick="logout()" class="secondary">تسجيل الخروج</button></div>
+  <div class="navlinks">
+      <button onclick="goHome()">الرئيسية</button>
+
+      <button id="guestLoginBtn" onclick="openAuthModal('login')" class="secondary">
+        <span class="txt">تسجيل الدخول</span>
+      </button>
+
+      <button id="guestRegisterBtn" onclick="openAuthModal('register')" class="primary">
+        <span class="txt">إنشاء حساب</span>
+      </button>
+
+      <button id="userOrdersBtn" class="hidden" onclick="openOrders()">
+        <span class="txt">طلباتي</span>
+      </button>
+
+      <button id="userProfileBtn" class="hidden" onclick="openProfile()">
+        <span class="txt">حسابي</span>
+      </button>
+
+      <button id="cartNavBtn" onclick="openCart()">🛒 <span class="txt">السلة</span> <span id="cartBadge" class="badge">0</span></button>
+
+      <button id="userLogoutBtn" onclick="logout()" class="secondary hidden">
+        <span class="txt">تسجيل الخروج</span>
+      </button>
+    </div>
 </div></header>
 
 <section class="section"><div class="wrap admin-layout">
@@ -330,6 +354,22 @@ const normPhone = s=>String(s||"").replace(/\D/g,"");
 const money = n=>Number(n||0).toLocaleString("en-US");
 const uid = ()=>auth.currentUser?.uid;
 
+function updateStoreAuthButtons(){
+  const loggedIn = !!currentUser && !guestMode;
+  const ids = {
+    guestLoginBtn: !loggedIn,
+    guestRegisterBtn: !loggedIn,
+    userOrdersBtn: loggedIn,
+    userProfileBtn: loggedIn,
+    userLogoutBtn: loggedIn
+  };
+  Object.entries(ids).forEach(([id,show])=>{
+    const el = document.getElementById(id);
+    if(el) el.classList.toggle("hidden", !show);
+  });
+}
+
+
 let fashionSlideIndex=0;
 let fashionSlideTimer=null;
 function renderFashionSlide(){
@@ -370,14 +410,30 @@ function updateAccountNav(){
   b.title=auth.currentUser?"حسابي":"متابعة إلى حسابي إلى حسابكِ";
   b.innerHTML=auth.currentUser?"♙":"♙";
 }
+
+window.openAuthModal=(tab="login")=>{
+  showPage("auth");
+  showAuthTab(tab);
+};
+
 window.showAuthTab=(tab)=>{
   $("loginForm").classList.toggle("hidden",tab!=="login");
   $("registerForm").classList.toggle("hidden",tab!=="register");
   $("loginTab").classList.toggle("active",tab==="login");
   $("registerTab").classList.toggle("active",tab==="register");
 };
-window.enterGuest=()=>{ guestMode=true; currentUser=null; currentProfile=null; cart=[]; showPage("store"); goHome(); toast("يمكنك الآن تصفح المتجر كضيف"); };
-window.logout=async()=>{ guestMode=true; cart=[]; await signOut(auth); showPage("store"); goHome(); toast("تم تسجيل الخروج"); };
+window.enterGuest=()=>{ guestMode=true; currentUser=null; currentProfile=null; cart=[]; showPage("store"); updateStoreAuthButtons(); goHome(); toast("يمكنك الآن تصفح المتجر كضيف"); };
+window.logout=async()=>{
+  guestMode=true;
+  cart=[];
+  currentUser=null;
+  currentProfile=null;
+  await signOut(auth);
+  showPage("store");
+  updateStoreAuthButtons();
+  goHome();
+  toast("تم تسجيل الخروج");
+};
 window.closeModal=()=>{ $("genericModal").classList.add("hidden"); $("modalBody").innerHTML=""; };
 function openModal(title,html){ $("modalTitle").textContent=title; $("modalBody").innerHTML=html; $("genericModal").classList.remove("hidden"); }
 
@@ -474,7 +530,7 @@ onAuthStateChanged(auth,async user=>{
     const s=await get(ref(db,`users/${user.uid}`));
     currentProfile=s.val()||null;
     if(!currentProfile){ toast("تعذر تحميل بيانات الحساب","bad"); await signOut(auth); return; }
-    showPage("store"); subscribeCart(); fillProfile(); goHome();
+    showPage("store"); updateStoreAuthButtons(); subscribeCart(); fillProfile(); goHome();
   }
 });
 
@@ -810,6 +866,7 @@ window.deleteCategory=async id=>{
 };
 
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+updateStoreAuthButtons();
 </script>
 </body>
 </html>
