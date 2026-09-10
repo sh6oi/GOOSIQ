@@ -1006,10 +1006,25 @@ $("profileForm").addEventListener("submit",async e=>{
 });
 window.goHome=()=>{ $("homeView").classList.remove("hidden"); $("accountView").classList.add("hidden"); window.scrollTo({top:0,behavior:"smooth"}); };
 window.openProfile=()=>{ if(guestMode){ openAuth("login"); return; } $("homeView").classList.add("hidden"); $("accountView").classList.remove("hidden"); showAccountPanel("profile"); fillProfile(); };
-window.openOrders=()=>{ if(guestMode){ openAuth("login"); return; } $("homeView").classList.add("hidden"); $("accountView").classList.remove("hidden"); showAccountPanel("orders"); loadMyOrders(); };
+window.openOrders=()=>{
+  if(guestMode){ openAuth("login"); return; }
+  $("homeView").classList.add("hidden");
+  $("accountView").classList.remove("hidden");
+  showAccountPanel("orders");
+};
+
 window.showAccountPanel=p=>{
-  $("profilePanel").classList.toggle("hidden",p!=="profile"); $("ordersPanel").classList.toggle("hidden",p!=="orders");
-  $("menuProfile").classList.toggle("active",p==="profile"); $("menuOrders").classList.toggle("active",p==="orders");
+  $("profilePanel").classList.toggle("hidden",p!=="profile");
+  $("ordersPanel").classList.toggle("hidden",p!=="orders");
+  $("menuProfile").classList.toggle("active",p==="profile");
+  $("menuOrders").classList.toggle("active",p==="orders");
+
+  // الإصلاح الجذري:
+  // كل مرة يتم فتح تبويب "طلباتي" نعيد تحميل الطلبات وننشئ المستمع المباشر.
+  // لذلك لن يبقى القسم فارغاً بعد تحديث الصفحة أو العودة من "حسابي".
+  if(p==="orders" && auth.currentUser && !guestMode){
+    loadMyOrders();
+  }
 };
 let myOrdersUnsubscribe = null;
 
@@ -1092,6 +1107,8 @@ function loadMyOrders(){
   const box = $("myOrders");
   const userId = uid();
   if(!box || !userId) return;
+
+  console.log("[GOOSIQ] Loading orders for user:", userId);
 
   cleanupMyOrderListeners();
   box.innerHTML = `<div class="empty">جاري تحميل طلباتكِ...</div>`;
