@@ -664,6 +664,7 @@ window.showAuthTab=(tab)=>{
 };
 window.enterGuest=()=>{ guestMode=true; currentUser=null; currentProfile=null; cart=[]; showPage("store"); updateStoreAuthButtons(); goHome(); toast("يمكنك الآن تصفح المتجر كضيف"); };
 window.logout=async()=>{
+  cleanupMyOrderListeners();
   guestMode=true;
   cart=[];
   currentUser=null;
@@ -949,7 +950,9 @@ async function placeOrder(){
   const order={id:orderId,orderNumber,userId:uid(),customerName:currentProfile.name,username:currentProfile.username,phone1,phone2,province,address,items:lineItems,originalSubtotal,subtotal,shipping:0,delivery,total,depositRequired:deposit,depositPaid:0,paymentStatus:"بانتظار إكمال إجراءات العربون عبر الموظف",status:"قيد المعالجة",createdAt:Date.now(),updatedAt:Date.now()};
   const updates={};
   updates[`orders/${orderId}`]=order;
-  updates[`userOrders/${uid()}/${orderId}`]=true;
+
+  // حفظ نسخة كاملة ومتطابقة من الطلب في حساب المستخدم.
+  // تتم الكتابة مع /orders في عملية ذرية واحدة.
   updates[`users/${uid()}/province`]=province; updates[`users/${uid()}/address`]=address; updates[`users/${uid()}/phone2`]=phone2;
   try{
     await update(ref(db),updates);
@@ -961,8 +964,7 @@ async function placeOrder(){
     await remove(ref(db,`carts/${uid()}`));
     currentProfile={...currentProfile,province,address,phone2};
 
-    // تحديث قائمة الطلبات إذا كانت مفتوحة
-    if(!$("ordersPanel")?.classList.contains("hidden")) loadMyOrders();
+    // مستمع userOrders سيعرض الطلب فوراً وبشكل ثابت.
 
     openModal("طلبكِ أصبح معنا 🤍",`
     <div style="text-align:center;padding:24px">
@@ -1009,99 +1011,183 @@ window.showAccountPanel=p=>{
   $("profilePanel").classList.toggle("hidden",p!=="profile"); $("ordersPanel").classList.toggle("hidden",p!=="orders");
   $("menuProfile").classList.toggle("active",p==="profile"); $("menuOrders").classList.toggle("active",p==="orders");
 };
-async function loadMyOrders(){
-  const box = $("myOrders");
-  box.innerHTML = `<div class="empty">جاري ترتيب طلباتكِ...</div>`;
+let myOrdersUnsubscribe = null;
 
-  try{
-    const indexSnap = await get(ref(db,`userOrders/${uid()}`));
-    const indexData = indexSnap.val() || {};
-    let ids = Object.keys(indexData);
-
-    // دعم الطلبات القديمة: إذا كان userOrders ناقصاً، نجرب استعلام الطلبات
-    // ونضم أي طلب سابق يخص الحساب الحالي.
-    try{
-      const oldSnap = await get(query(ref(db,"orders"),orderByChild("userId"),equalTo(uid())));
-      const oldOrders = oldSnap.val() || {};
-      ids = [...new Set([...ids, ...Object.keys(oldOrders)])];
-    }catch(oldErr){
-      console.info("Legacy orders query skipped by current rules:", oldErr?.message || oldErr);
-    }
-
-    if(!ids.length){
-      box.innerHTML = `<div class="empty">لا توجد طلبات حتى الآن.</div>`;
-      return;
-    }
-
-    const snaps = await Promise.all(ids.map(orderId=>get(ref(db,`orders/${orderId}`))));
-    const arr = snaps
-      .filter(s=>s.exists())
-      .map(s=>s.val())
-      .filter(o=>o && o.userId===uid())
-      .sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
-
-    if(!arr.length){
-      box.innerHTML = `<div class="empty">لا توجد طلبات حتى الآن.</div>`;
-      return;
-    }
-
-    box.innerHTML = `<div class="order-list">${arr.map(o=>{
-      const items = Array.isArray(o.items) ? o.items : Object.values(o.items||{});
-      const thumbs = items.slice(0,4).map(x=>
-        `<img class="order-product-thumb" src="${esc(x.image||"")}" alt="${esc(x.name||"منتج")}" onerror="this.style.display='none'">`
-      ).join("");
-      const more = items.length>4 ? `<div class="order-more-thumb">+${items.length-4}</div>` : "";
-      const deliveryText = Number(o.delivery||0)===0 ? "مجاني" : `${money(o.delivery)} د.ع`;
-      const progress = orderProgressPercent(o.status);
-
-      return `
-        <article class="order-card">
-          <div class="order-card-head">
-            <div class="order-number-wrap">
-              <span class="order-number-label">رقم الطلب</span>
-              <b class="order-number">#${esc(o.orderNumber||o.id||"")}</b>
-              <span class="order-date">${new Date(Number(o.createdAt||0)).toLocaleString("ar-IQ")}</span>
-            </div>
-            ${renderOrderStatus(o.status)}
-          </div>
-
-          ${items.length ? `<div class="order-products-preview">${thumbs}${more}</div>` : ""}
-
-          <div class="order-info-grid">
-            <div class="order-info-box">
-              <span>قيمة الطلب</span>
-              <b>${money(o.total)} د.ع</b>
-            </div>
-            <div class="order-info-box">
-              <span>العربون المطلوب</span>
-              <b>${money(o.depositRequired||0)} د.ع</b>
-            </div>
-            <div class="order-info-box">
-              <span>التوصيل</span>
-              <b>${deliveryText}</b>
-            </div>
-          </div>
-
-          ${o.status!=="ملغي" ? `
-          <div class="order-progress">
-            <div class="order-progress-track"><div class="order-progress-fill" style="width:${progress}%"></div></div>
-            <div class="order-progress-labels">
-              <span>استلام</span><span>شراء</span><span>تجهيز</span><span>شحن</span><span>العراق</span>
-            </div>
-          </div>` : ""}
-
-          <div class="order-card-footer">
-            <span class="order-payment-note">${esc(o.paymentStatus||"يمكنكِ متابعة جميع تفاصيل الطلب من هنا")}</span>
-            <button class="order-view-btn" onclick="showOrderDetails('${o.id}',false)">عرض التفاصيل</button>
-          </div>
-        </article>`;
-    }).join("")}</div>`;
-
-  }catch(err){
-    console.error("loadMyOrders:",err);
-    box.innerHTML = `<div class="empty">تعذر تحميل الطلبات. يرجى إعادة المحاولة.</div>`;
+function cleanupMyOrderListeners(){
+  if(typeof myOrdersUnsubscribe === "function"){
+    try{ myOrdersUnsubscribe(); }catch(_){}
   }
+  myOrdersUnsubscribe = null;
 }
+
+function renderMyOrdersArray(arr){
+  const box = $("myOrders");
+  if(!box) return;
+
+  arr = (arr||[])
+    .filter(o=>o && typeof o==="object")
+    .sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
+
+  if(!arr.length){
+    box.innerHTML = `<div class="empty">لا توجد طلبات حتى الآن.</div>`;
+    return;
+  }
+
+  box.innerHTML = `<div class="order-list">${arr.map(o=>{
+    const items = Array.isArray(o.items) ? o.items : Object.values(o.items||{});
+    const thumbs = items.slice(0,4).map(x=>
+      `<img class="order-product-thumb" src="${esc(x.image||"")}" alt="${esc(x.name||"منتج")}" onerror="this.style.display='none'">`
+    ).join("");
+    const more = items.length>4 ? `<div class="order-more-thumb">+${items.length-4}</div>` : "";
+    const deliveryText = Number(o.delivery||0)===0 ? "مجاني" : `${money(o.delivery)} د.ع`;
+    const progress = orderProgressPercent(o.status);
+
+    return `
+      <article class="order-card">
+        <div class="order-card-head">
+          <div class="order-number-wrap">
+            <span class="order-number-label">رقم الطلب</span>
+            <b class="order-number">#${esc(o.orderNumber||o.id||"")}</b>
+            <span class="order-date">${new Date(Number(o.createdAt||0)).toLocaleString("ar-IQ")}</span>
+          </div>
+          ${renderOrderStatus(o.status)}
+        </div>
+
+        ${items.length ? `<div class="order-products-preview">${thumbs}${more}</div>` : ""}
+
+        <div class="order-info-grid">
+          <div class="order-info-box">
+            <span>قيمة الطلب</span>
+            <b>${money(o.total)} د.ع</b>
+          </div>
+          <div class="order-info-box">
+            <span>العربون المطلوب</span>
+            <b>${money(o.depositRequired||0)} د.ع</b>
+          </div>
+          <div class="order-info-box">
+            <span>التوصيل</span>
+            <b>${deliveryText}</b>
+          </div>
+        </div>
+
+        ${o.status!=="ملغي" ? `
+        <div class="order-progress">
+          <div class="order-progress-track">
+            <div class="order-progress-fill" style="width:${progress}%"></div>
+          </div>
+          <div class="order-progress-labels">
+            <span>استلام</span><span>شراء</span><span>تجهيز</span><span>شحن</span><span>العراق</span>
+          </div>
+        </div>` : ""}
+
+        <div class="order-card-footer">
+          <span class="order-payment-note">${esc(o.paymentStatus||"يمكنكِ متابعة جميع تفاصيل الطلب من هنا")}</span>
+          <button class="order-view-btn" onclick="showUserOrderDetails('${esc(o.id||"")}')">عرض التفاصيل</button>
+        </div>
+      </article>`;
+  }).join("")}</div>`;
+}
+
+function loadMyOrders(){
+  const box = $("myOrders");
+  const userId = uid();
+  if(!box || !userId) return;
+
+  cleanupMyOrderListeners();
+  box.innerHTML = `<div class="empty">جاري تحميل طلباتكِ...</div>`;
+
+  // استعلام واحد مباشر على /orders، والفلترة حسب userId فقط.
+  // تغيير status لا يؤثر نهائياً على نتيجة الاستعلام.
+  const myOrdersQuery = query(
+    ref(db,"orders"),
+    orderByChild("userId"),
+    equalTo(userId)
+  );
+
+  myOrdersUnsubscribe = onValue(
+    myOrdersQuery,
+    snapshot=>{
+      try{
+        const raw = snapshot.val() || {};
+        const arr = Object.entries(raw).map(([orderId,value])=>({
+          id: value?.id || orderId,
+          ...value
+        }));
+        renderMyOrdersArray(arr);
+      }catch(err){
+        console.error("render my orders:",err);
+        box.innerHTML = `<div class="empty">تعذر عرض الطلبات. يرجى إعادة المحاولة.</div>`;
+      }
+    },
+    err=>{
+      console.error("my orders query error:",err);
+      box.innerHTML = `<div class="empty" style="color:#b42318">
+        تعذر تحميل الطلبات من قاعدة البيانات.<br>
+        <span class="hint">${esc(err?.message || "Permission denied")}</span>
+      </div>`;
+    }
+  );
+}
+
+window.showUserOrderDetails=async(id)=>{
+  try{
+    const userId = uid();
+    if(!userId) return;
+
+    const snap = await get(ref(db,`orders/${id}`));
+    if(!snap.exists()) return toast("تعذر العثور على تفاصيل الطلب","bad");
+
+    const order = {id, ...snap.val()};
+    if(order.userId !== userId) return toast("لا يمكنك الوصول إلى هذا الطلب","bad");
+
+    openModal(`الطلب #${order.orderNumber}`,`
+      <div class="grid2">
+        <div class="panel">
+          <b>بيانات التوصيل</b>
+          <p class="hint">
+            ${esc(order.customerName||"")}<br>
+            ${esc(order.province||"")} - ${esc(order.address||"")}<br>
+            ${esc(order.phone1||"")} ${order.phone2?" / "+esc(order.phone2):""}
+          </p>
+        </div>
+        <div class="panel">
+          <b>حالة الطلب</b>
+          <p>${renderOrderStatus(order.status)}</p>
+          <div class="hint">${new Date(order.createdAt).toLocaleString("ar-IQ")}</div>
+        </div>
+      </div>
+
+      <h3>المنتجات</h3>
+      <div class="cart-list">
+        ${(Array.isArray(order.items)?order.items:Object.values(order.items||{})).map(x=>`
+          <div class="cart-item">
+            <img src="${esc(x.image||"")}">
+            <div>
+              <b>${esc(x.name||"")}</b>
+              <div class="hint">
+                القياس: ${esc(x.size||"-")} • اللون: ${esc(x.color||"-")} • الكمية: ${Number(x.qty||1)}
+              </div>
+            </div>
+            <b>${money(Number(x.unitPrice||0)*Number(x.qty||1))} د.ع</b>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="summary" style="margin-top:14px">
+        <div class="sum-row"><span>قبل الخصم</span><b>${money(order.originalSubtotal)} د.ع</b></div>
+        <div class="sum-row"><span>بعد الخصم</span><b>${money(order.subtotal)} د.ع</b></div>
+        <div class="sum-row"><span>الشحن</span><b>مجاني</b></div>
+        <div class="sum-row"><span>التوصيل</span><b>${order.delivery?money(order.delivery)+" د.ع":"مجاني"}</b></div>
+        <div class="sum-row total"><span>الإجمالي</span><b>${money(order.total)} د.ع</b></div>
+        <div class="sum-row"><span>العربون المطلوب</span><b>${money(order.depositRequired)} د.ع</b></div>
+        <div class="sum-row"><span>المبلغ المدفوع</span><b>${money(order.depositPaid||0)} د.ع</b></div>
+      </div>
+    `);
+  }catch(err){
+    console.error("showUserOrderDetails:",err);
+    toast("تعذر تحميل تفاصيل الطلب","bad");
+  }
+};
 
 function subscribeAdmin(){
   if($("adminUsersTable")) $("adminUsersTable").innerHTML = `<div class="empty">جاري تحميل المستخدمين...</div>`;
@@ -1191,6 +1277,17 @@ window.editUser=id=>{
   </div><button class="btn primary">حفظ</button></form>`);
   $("adminEditUserForm").onsubmit=async e=>{e.preventDefault();await update(ref(db,`users/${id}`),{name:$("aeName").value.trim(),phone1:normPhone($("aePhone1").value),phone2:normPhone($("aePhone2").value),province:$("aeProvince").value,address:$("aeAddress").value.trim()});toast("تم التحديث","ok");closeModal();};
 };
+
+async function updateOrderAndUserMirror(orderId, changes){
+  const current = adminOrders[orderId];
+  if(!current) throw new Error("ORDER_NOT_FOUND");
+
+  await update(ref(db,`orders/${orderId}`),{
+    ...changes,
+    updatedAt: Date.now()
+  });
+}
+
 window.renderAdminOrders=()=>{
   if(!$("adminOrdersTable"))return;
   const search=String($("adminOrderSearch")?.value||"").trim(), status=$("adminOrderStatus")?.value||"", date=$("adminOrderDate")?.value||"", sort=$("adminOrderSort")?.value||"new";
@@ -1206,21 +1303,125 @@ window.renderAdminOrders=()=>{
   <td><button class="btn secondary small" onclick="showOrderDetails('${o.id}',true)">تفاصيل</button> <button class="btn secondary small" onclick="editOrderNumber('${o.id}')">رقم الطلب</button> <button class="btn danger small" onclick="cancelOrder('${o.id}')">إلغاء</button></td></tr>`).join("")}
   </tbody></table></div>`;
 };
-window.changeOrderStatus=async(id,status)=>{await update(ref(db,`orders/${id}`),{status,updatedAt:Date.now()});toast("تم تغيير حالة الطلب","ok");};
+window.changeOrderStatus=async(id,status)=>{
+  try{
+    await updateOrderAndUserMirror(id,{status});
+    toast("تم تغيير حالة الطلب وتحديثها لدى المستخدم","ok");
+  }catch(err){
+    console.error("changeOrderStatus:",err);
+    toast("تعذر تغيير حالة الطلب","bad");
+  }
+};
 window.cancelOrder=async id=>{if(confirm("هل تريد إلغاء هذا الطلب؟"))await changeOrderStatus(id,"ملغي");};
 window.editOrderNumber=id=>{
   const o=adminOrders[id]; const last=String(o.orderNumber||"").slice(-4);
   openModal("تعديل آخر 4 أرقام",`<form id="orderNumForm" class="form"><div class="field"><label>آخر 4 أرقام</label><input id="newSuffix" class="input" maxlength="4" pattern="[0-9]{4}" required value="${last}"></div><button class="btn primary">حفظ</button></form>`);
-  $("orderNumForm").onsubmit=async e=>{e.preventDefault();const suf=$("newSuffix").value;if(!/^\d{4}$/.test(suf))return toast("أدخل 4 أرقام","bad");const old=String(o.orderNumber);const next=old.slice(0,-4)+suf;await update(ref(db,`orders/${id}`),{orderNumber:next,updatedAt:Date.now()});toast("تم تعديل رقم الطلب","ok");closeModal();};
+  $("orderNumForm").onsubmit=async e=>{
+    e.preventDefault();
+    const suf=$("newSuffix").value;
+    if(!/^\d{4}$/.test(suf)) return toast("أدخل 4 أرقام","bad");
+    const old=String(o.orderNumber);
+    const next=old.slice(0,-4)+suf;
+    try{
+      await updateOrderAndUserMirror(id,{orderNumber:next});
+      toast("تم تعديل رقم الطلب","ok");
+      closeModal();
+    }catch(err){
+      console.error("editOrderNumber:",err);
+      toast("تعذر تعديل رقم الطلب","bad");
+    }
+  };
 };
 window.bulkChangeStatus=async()=>{
   const suffix=$("bulkSuffix").value.trim(), status=$("bulkStatus").value;
-  if(!/^\d{4}$/.test(suffix))return toast("أدخل آخر 4 أرقام صحيحة","bad");
+  if(!/^\d{4}$/.test(suffix)) return toast("أدخل آخر 4 أرقام صحيحة","bad");
+
   const matches=Object.values(adminOrders).filter(o=>String(o.orderNumber||"").endsWith(suffix));
-  if(!matches.length)return toast("لا توجد طلبات مطابقة","bad");
-  const up={}; matches.forEach(o=>{up[`orders/${o.id}/status`]=status;up[`orders/${o.id}/updatedAt`]=Date.now();});
-  await update(ref(db),up);toast(`تم تحديث ${matches.length} طلب`,"ok");
+  if(!matches.length) return toast("لا توجد طلبات مطابقة","bad");
+
+  try{
+    const multi = {};
+    const now = Date.now();
+
+    matches.forEach(o=>{
+      multi[`orders/${o.id}/status`] = status;
+      multi[`orders/${o.id}/updatedAt`] = now;
+    });
+
+    await update(ref(db),multi);
+    toast(`تم تحديث ${matches.length} طلب بنجاح`,"ok");
+  }catch(err){
+    console.error("bulkChangeStatus:",err);
+    toast("تعذر تحديث حالات الطلبات","bad");
+  }
 };
+
+window.showUserOrderDetails=async(id)=>{
+  try{
+    let order = null;
+
+    const ownSnap = await get(ref(db,`userOrders/${uid()}/${id}`));
+    if(ownSnap.exists() && ownSnap.val() && typeof ownSnap.val()==="object"){
+      order = {id, ...ownSnap.val()};
+    }
+
+    // دعم الطلبات القديمة.
+    if(!order){
+      const legacySnap = await get(ref(db,`orders/${id}`));
+      if(legacySnap.exists()) order = legacySnap.val();
+    }
+
+    if(!order) return toast("تعذر العثور على تفاصيل الطلب","bad");
+
+    openModal(`الطلب #${order.orderNumber}`,`
+      <div class="grid2">
+        <div class="panel">
+          <b>بيانات التوصيل</b>
+          <p class="hint">
+            ${esc(order.customerName||"")}<br>
+            ${esc(order.province||"")} - ${esc(order.address||"")}<br>
+            ${esc(order.phone1||"")} ${order.phone2?" / "+esc(order.phone2):""}
+          </p>
+        </div>
+        <div class="panel">
+          <b>حالة الطلب</b>
+          <p>${renderOrderStatus(order.status)}</p>
+          <div class="hint">${new Date(order.createdAt).toLocaleString("ar-IQ")}</div>
+        </div>
+      </div>
+
+      <h3>المنتجات</h3>
+      <div class="cart-list">
+        ${(Array.isArray(order.items)?order.items:Object.values(order.items||{})).map(x=>`
+          <div class="cart-item">
+            <img src="${esc(x.image||"")}">
+            <div>
+              <b>${esc(x.name||"")}</b>
+              <div class="hint">
+                القياس: ${esc(x.size||"-")} • اللون: ${esc(x.color||"-")} • الكمية: ${Number(x.qty||1)}
+              </div>
+            </div>
+            <b>${money(Number(x.unitPrice||0)*Number(x.qty||1))} د.ع</b>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="summary" style="margin-top:14px">
+        <div class="sum-row"><span>قبل الخصم</span><b>${money(order.originalSubtotal)} د.ع</b></div>
+        <div class="sum-row"><span>بعد الخصم</span><b>${money(order.subtotal)} د.ع</b></div>
+        <div class="sum-row"><span>الشحن</span><b>مجاني</b></div>
+        <div class="sum-row"><span>التوصيل</span><b>${order.delivery?money(order.delivery)+" د.ع":"مجاني"}</b></div>
+        <div class="sum-row total"><span>الإجمالي</span><b>${money(order.total)} د.ع</b></div>
+        <div class="sum-row"><span>العربون المطلوب</span><b>${money(order.depositRequired)} د.ع</b></div>
+        <div class="sum-row"><span>المبلغ المدفوع</span><b>${money(order.depositPaid||0)} د.ع</b></div>
+      </div>
+    `);
+  }catch(err){
+    console.error("showUserOrderDetails:",err);
+    toast("تعذر تحميل تفاصيل الطلب","bad");
+  }
+};
+
 window.showOrderDetails=(id,isAdmin)=>{
   const o=isAdmin?adminOrders[id]:null;
   const show=async()=>{
