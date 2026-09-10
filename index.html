@@ -314,6 +314,28 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
   .order-card-footer{padding:12px 15px 15px}
 }
 
+
+/* عرض حالة الطلب كاملة بدون اختصار */
+.order-status-beauty{
+  max-width:none !important;
+  width:auto;
+  white-space:normal;
+  text-align:right;
+  line-height:1.8;
+  overflow:visible;
+  text-overflow:clip;
+}
+@media(max-width:620px){
+  .order-status-beauty{
+    max-width:100% !important;
+    font-size:10px;
+    padding:8px 10px;
+  }
+  .order-card-head{
+    flex-wrap:wrap;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -356,7 +378,7 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
           <div class="field"><label>رقم إضافي (اختياري)</label><input id="regPhone2" class="input" maxlength="11" inputmode="numeric" placeholder="07xxxxxxxxx"></div>
         </div>
         <div class="field"><label>اسم المستخدم</label><input id="regUsername" class="input" required minlength="5" placeholder="مثال: sara25">
-          <div class="hint">5 أحرف أو أرقام على الأقل، ويجب أن يحتوي على حرف إنجليزي. نطاق @goosiq.com مخصص للإدارة فقط.</div>
+          <div class="hint">5 أحرف أو أرقام على الأقل، ويجب أن يحتوي على حرف إنجليزي.فقط.</div>
         </div>
         <div class="grid2">
           <div class="field"><label>المحافظة</label><select id="regProvince" class="input" required></select></div>
@@ -703,10 +725,10 @@ $("registerForm").addEventListener("submit",async(e)=>{
 
   // نطاق GOOSIQ مخصص حصراً لحسابات الإدارة ولا يمكن استخدامه في حسابات الزبائن.
   if(email.endsWith(ADMIN_DOMAIN))
-    return toast("لا يمكن استخدام بريد ينتهي بـ @goosiq.com في حساب المستخدم","bad");
+    return toast("لا يمكن استخدام هذا النطاق","bad");
 
   if(username.endsWith(ADMIN_DOMAIN) || username.includes("@goosiq.com"))
-    return toast("لا يمكن استخدام @goosiq.com ضمن اسم المستخدم","bad");
+    return toast(" لا يمكن استخدام اسم المستخدم","bad");
 
   if(!validateUsername(username))
     return toast("اسم المستخدم 5 أحرف/أرقام على الأقل ويجب أن يحتوي حرفاً إنجليزياً","bad");
@@ -930,7 +952,8 @@ function orderProgressPercent(status){
 
 function renderOrderStatus(status){
   const meta = getOrderStatusMeta(status);
-  return `<span class="order-status-beauty ${meta.cls}" title="${esc(status||"")}">${esc(meta.label)}</span>`;
+  const fullStatus = String(status || "قيد المعالجة");
+  return `<span class="order-status-beauty ${meta.cls}" title="${esc(fullStatus)}">${esc(fullStatus)}</span>`;
 }
 
 function generateOrderNumber(){ return String(Date.now()).slice(-10)+String(Math.floor(10+Math.random()*89)); }
@@ -1027,12 +1050,14 @@ window.showAccountPanel=p=>{
   }
 };
 let myOrdersUnsubscribe = null;
+let myOrdersCache = {};
 
 function cleanupMyOrderListeners(){
   if(typeof myOrdersUnsubscribe === "function"){
     try{ myOrdersUnsubscribe(); }catch(_){}
   }
   myOrdersUnsubscribe = null;
+  myOrdersCache = {};
 }
 
 function renderMyOrdersArray(arr){
@@ -1130,6 +1155,13 @@ function loadMyOrders(){
           id: value?.id || orderId,
           ...value
         }));
+
+        // نفس البيانات الحية التي تظهر في بطاقة الطلب تُستخدم أيضاً في نافذة التفاصيل.
+        myOrdersCache = {};
+        arr.forEach(order=>{
+          if(order?.id) myOrdersCache[order.id] = order;
+        });
+
         renderMyOrdersArray(arr);
       }catch(err){
         console.error("render my orders:",err);
@@ -1151,10 +1183,24 @@ window.showUserOrderDetails=async(id)=>{
     const userId = uid();
     if(!userId) return;
 
-    const snap = await get(ref(db,`orders/${id}`));
-    if(!snap.exists()) return toast("تعذر العثور على تفاصيل الطلب","bad");
+    // ابدأ بنفس النسخة الحية التي تُعرض في بطاقة "طلباتي".
+    let order = myOrdersCache[id] ? {...myOrdersCache[id]} : null;
 
-    const order = {id, ...snap.val()};
+    // جلب مباشر من المصدر الرئيسي لتأكيد أحدث حالة.
+    try{
+      const snap = await get(ref(db,`orders/${id}`));
+      if(snap.exists()){
+        const fresh = {id, ...snap.val()};
+        if(fresh.userId === userId){
+          order = fresh;
+          myOrdersCache[id] = fresh;
+        }
+      }
+    }catch(fetchErr){
+      console.warn("Fresh order details read failed; using live cache:", fetchErr);
+    }
+
+    if(!order) return toast("تعذر العثور على تفاصيل الطلب","bad");
     if(order.userId !== userId) return toast("لا يمكنك الوصول إلى هذا الطلب","bad");
 
     openModal(`الطلب #${order.orderNumber}`,`
@@ -1167,14 +1213,32 @@ window.showUserOrderDetails=async(id)=>{
             ${esc(order.phone1||"")} ${order.phone2?" / "+esc(order.phone2):""}
           </p>
         </div>
+
         <div class="panel">
-          <b>حالة الطلب</b>
-          <p>${renderOrderStatus(order.status)}</p>
-          <div class="hint">${new Date(order.createdAt).toLocaleString("ar-IQ")}</div>
+          <b>حالة الطلب الحالية</b>
+          <div style="margin-top:10px">${renderOrderStatus(order.status)}</div>
+          <div class="hint" style="margin-top:8px">
+            آخر تحديث: ${new Date(Number(order.updatedAt||order.createdAt||0)).toLocaleString("ar-IQ")}
+          </div>
         </div>
       </div>
 
+      ${order.status!=="ملغي" ? `
+      <div class="order-progress" style="margin-top:16px;padding:16px;background:#fffafb;border:1px solid var(--line);border-radius:16px">
+        <div class="order-progress-track">
+          <div class="order-progress-fill" style="width:${orderProgressPercent(order.status)}%"></div>
+        </div>
+        <div class="order-progress-labels">
+          <span>استلام</span>
+          <span>شراء</span>
+          <span>تجهيز</span>
+          <span>شحن</span>
+          <span>العراق</span>
+        </div>
+      </div>` : ""}
+
       <h3>المنتجات</h3>
+
       <div class="cart-list">
         ${(Array.isArray(order.items)?order.items:Object.values(order.items||{})).map(x=>`
           <div class="cart-item">
@@ -1200,6 +1264,7 @@ window.showUserOrderDetails=async(id)=>{
         <div class="sum-row"><span>المبلغ المدفوع</span><b>${money(order.depositPaid||0)} د.ع</b></div>
       </div>
     `);
+
   }catch(err){
     console.error("showUserOrderDetails:",err);
     toast("تعذر تحميل تفاصيل الطلب","bad");
@@ -1370,72 +1435,6 @@ window.bulkChangeStatus=async()=>{
   }catch(err){
     console.error("bulkChangeStatus:",err);
     toast("تعذر تحديث حالات الطلبات","bad");
-  }
-};
-
-window.showUserOrderDetails=async(id)=>{
-  try{
-    let order = null;
-
-    const ownSnap = await get(ref(db,`userOrders/${uid()}/${id}`));
-    if(ownSnap.exists() && ownSnap.val() && typeof ownSnap.val()==="object"){
-      order = {id, ...ownSnap.val()};
-    }
-
-    // دعم الطلبات القديمة.
-    if(!order){
-      const legacySnap = await get(ref(db,`orders/${id}`));
-      if(legacySnap.exists()) order = legacySnap.val();
-    }
-
-    if(!order) return toast("تعذر العثور على تفاصيل الطلب","bad");
-
-    openModal(`الطلب #${order.orderNumber}`,`
-      <div class="grid2">
-        <div class="panel">
-          <b>بيانات التوصيل</b>
-          <p class="hint">
-            ${esc(order.customerName||"")}<br>
-            ${esc(order.province||"")} - ${esc(order.address||"")}<br>
-            ${esc(order.phone1||"")} ${order.phone2?" / "+esc(order.phone2):""}
-          </p>
-        </div>
-        <div class="panel">
-          <b>حالة الطلب</b>
-          <p>${renderOrderStatus(order.status)}</p>
-          <div class="hint">${new Date(order.createdAt).toLocaleString("ar-IQ")}</div>
-        </div>
-      </div>
-
-      <h3>المنتجات</h3>
-      <div class="cart-list">
-        ${(Array.isArray(order.items)?order.items:Object.values(order.items||{})).map(x=>`
-          <div class="cart-item">
-            <img src="${esc(x.image||"")}">
-            <div>
-              <b>${esc(x.name||"")}</b>
-              <div class="hint">
-                القياس: ${esc(x.size||"-")} • اللون: ${esc(x.color||"-")} • الكمية: ${Number(x.qty||1)}
-              </div>
-            </div>
-            <b>${money(Number(x.unitPrice||0)*Number(x.qty||1))} د.ع</b>
-          </div>
-        `).join("")}
-      </div>
-
-      <div class="summary" style="margin-top:14px">
-        <div class="sum-row"><span>قبل الخصم</span><b>${money(order.originalSubtotal)} د.ع</b></div>
-        <div class="sum-row"><span>بعد الخصم</span><b>${money(order.subtotal)} د.ع</b></div>
-        <div class="sum-row"><span>الشحن</span><b>مجاني</b></div>
-        <div class="sum-row"><span>التوصيل</span><b>${order.delivery?money(order.delivery)+" د.ع":"مجاني"}</b></div>
-        <div class="sum-row total"><span>الإجمالي</span><b>${money(order.total)} د.ع</b></div>
-        <div class="sum-row"><span>العربون المطلوب</span><b>${money(order.depositRequired)} د.ع</b></div>
-        <div class="sum-row"><span>المبلغ المدفوع</span><b>${money(order.depositPaid||0)} د.ع</b></div>
-      </div>
-    `);
-  }catch(err){
-    console.error("showUserOrderDetails:",err);
-    toast("تعذر تحميل تفاصيل الطلب","bad");
   }
 };
 
