@@ -980,6 +980,67 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
   }
 }
 
+
+/* ===== Automatic USD → IQD pricing ===== */
+.auto-price-preview{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:4px;
+}
+.auto-price-step{
+  display:grid;
+  gap:5px;
+  padding:13px 14px;
+  border-radius:15px;
+  border:1px solid #eadde3;
+  background:#fff;
+}
+.auto-price-step span{
+  font-size:10px;
+  color:#8d737e;
+  font-weight:700;
+}
+.auto-price-step b{
+  font-size:16px;
+  color:#34232b;
+  font-weight:900;
+}
+.auto-price-step.original{
+  background:#fff8fb;
+}
+.auto-price-step.original b{
+  color:#7d2f50;
+}
+.auto-price-step.discount{
+  background:#fdf0f4;
+}
+.auto-price-step.discount b{
+  color:#a63f68;
+  font-size:20px;
+}
+.auto-price-step.final{
+  background:#111;
+  border-color:#111;
+}
+.auto-price-step.final span{color:#d8cbd1}
+.auto-price-step.final b{
+  color:#fff;
+  font-size:20px;
+}
+.auto-price-rule{
+  padding:10px 12px;
+  border-radius:12px;
+  background:#fff9e8;
+  border:1px solid #f0dfb1;
+  color:#725c24;
+  font-size:10px;
+  line-height:1.8;
+}
+@media(max-width:560px){
+  .auto-price-preview{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -1257,6 +1318,49 @@ const ORDER_STATUSES = ["قيد المعالجة","تم الشراء","قيد ا
 const MIN_ORDER_VALUE = 25000;
 const DEPOSIT_BASE_VALUE = 25000;
 const DEPOSIT_PER_BASE = 5000;
+
+const USD_TO_IQD = 1350;
+const PRICE_MARKUP_PERCENT = 50;
+const AUTO_DISCOUNT_PERCENT = 30;
+
+function roundUpToNearest1000(value){
+  const n = Number(value || 0);
+  if(n <= 0) return 0;
+  return Math.ceil(n / 1000) * 1000;
+}
+
+function calculateAutoProductPricing(usdPrice){
+  const usd = Number(usdPrice || 0);
+  if(!Number.isFinite(usd) || usd <= 0){
+    return {
+      usdPrice: 0,
+      markedUpUsd: 0,
+      originalPriceIQD: 0,
+      salePriceIQD: 0,
+      discount: AUTO_DISCOUNT_PERCENT
+    };
+  }
+
+  // زيادة السعر بنسبة 50%
+  const markedUpUsd = usd * 1.5;
+
+  // تحويل إلى الدينار العراقي ثم التقريب دائماً للأعلى إلى أقرب ألف
+  const originalPriceIQD = roundUpToNearest1000(markedUpUsd * USD_TO_IQD);
+
+  // خصم 30% من السعر قبل الخصم ثم التقريب للأعلى إلى أقرب ألف
+  const salePriceIQD = roundUpToNearest1000(
+    originalPriceIQD * 0.60
+  );
+
+  return {
+    usdPrice: usd,
+    markedUpUsd,
+    originalPriceIQD,
+    salePriceIQD,
+    discount: AUTO_DISCOUNT_PERCENT
+  };
+}
+
 
 function calculateDeposit(orderProductsValue){
   const value = Number(orderProductsValue || 0);
@@ -2467,9 +2571,17 @@ window.showOrderDetails=(id,isAdmin)=>{
 
 window.openProductEditor=(id="")=>{
   const p=id?products[id]:{};
-  const originalPrice = Number(p.price||0);
-  const currentSalePrice = id ? finalPrice(p) : 0;
-  const currentDiscount = calculateDiscountPercent(originalPrice,currentSalePrice);
+
+  const existingUsd = Number(p.usdPrice || 0);
+  const initial = existingUsd > 0
+    ? calculateAutoProductPricing(existingUsd)
+    : {
+        usdPrice:0,
+        markedUpUsd:0,
+        originalPriceIQD:Number(p.price||0),
+        salePriceIQD:finalPrice(p),
+        discount:Number(p.discount||AUTO_DISCOUNT_PERCENT)
+      };
 
   openModal(id?"تعديل المنتج":"إضافة منتج",`<form id="productForm" class="form">
     <div class="field">
@@ -2488,27 +2600,38 @@ window.openProductEditor=(id="")=>{
       <div class="hint">يمكن إدخال عدد غير محدود، رابط واحد في كل سطر.</div>
     </div>
 
-    <div class="grid2">
-      <div class="field">
-        <label>السعر قبل الخصم</label>
-        <input id="pePrice" type="number" min="1" class="input" required value="${originalPrice||""}" placeholder="مثال: 50,000">
+    <div class="field">
+      <label>السعر بالدولار ($)</label>
+      <input id="peUsdPrice" type="number" min="0.01" step="0.01" class="input" required
+             value="${existingUsd || ""}" placeholder="مثال: 10.50">
+      <div class="hint">سيتم إضافة 50% للسعر، ثم التحويل على 1$ = 1,350 د.ع، وبعدها خصم 30% تلقائياً.</div>
+    </div>
+
+    <div class="auto-price-preview">
+      <div class="auto-price-step">
+        <span>السعر بالدولار بعد زيادة 50%</span>
+        <b id="peMarkedUsd">$${initial.markedUpUsd ? initial.markedUpUsd.toFixed(2) : "0.00"}</b>
       </div>
 
-      <div class="field">
-        <label>السعر بعد الخصم</label>
-        <input id="peSalePrice" type="number" min="0" class="input" required value="${currentSalePrice||""}" placeholder="مثال: 40,000">
+      <div class="auto-price-step original">
+        <span>السعر قبل الخصم بالدينار</span>
+        <b id="peOriginalIqd">${money(initial.originalPriceIQD)} د.ع</b>
+      </div>
+
+      <div class="auto-price-step discount">
+        <span>الخصم التلقائي</span>
+        <b>30%</b>
+      </div>
+
+      <div class="auto-price-step final">
+        <span>السعر بعد الخصم بالدينار</span>
+        <b id="peSaleIqd">${money(initial.salePriceIQD)} د.ع</b>
       </div>
     </div>
 
-    <div id="autoDiscountPreview" class="auto-discount-preview">
-      <div>
-        <span>الخصم المحسوب تلقائياً</span>
-        <b id="autoDiscountPercent">${currentDiscount}%</b>
-      </div>
-      <div>
-        <span>قيمة التوفير</span>
-        <b id="autoSavingAmount">${money(Math.max(0,originalPrice-currentSalePrice))} د.ع</b>
-      </div>
+    <div class="auto-price-rule">
+      يتم تقريب السعر دائماً للأعلى إلى أقرب 1,000 د.ع.
+      مثال: 13,560 د.ع ← 14,000 د.ع.
     </div>
 
     <div class="grid2">
@@ -2525,7 +2648,9 @@ window.openProductEditor=(id="")=>{
       <div class="field">
         <label>الفئة</label>
         <select id="peCategory" class="input" required>
-          ${Object.entries(categories).map(([cid,c])=>`<option value="${cid}" ${p.categoryId===cid?"selected":""}>${esc(c.name)}</option>`).join("")}
+          ${Object.entries(categories).map(([cid,c])=>`
+            <option value="${cid}" ${p.categoryId===cid?"selected":""}>${esc(c.name)}</option>
+          `).join("")}
         </select>
       </div>
     </div>
@@ -2538,47 +2663,38 @@ window.openProductEditor=(id="")=>{
     <button class="btn primary">حفظ المنتج</button>
   </form>`);
 
-  const updateDiscountPreview=()=>{
-    const original=Number($("pePrice").value||0);
-    const sale=Number($("peSalePrice").value||0);
-    const discount=calculateDiscountPercent(original,sale);
-    const saving=Math.max(0,original-sale);
-
-    $("autoDiscountPercent").textContent=`${discount}%`;
-    $("autoSavingAmount").textContent=`${money(saving)} د.ع`;
-
-    const preview=$("autoDiscountPreview");
-    preview.classList.toggle("invalid-price", sale>original && original>0);
+  const refreshAutoPrice=()=>{
+    const calc=calculateAutoProductPricing(Number($("peUsdPrice").value||0));
+    $("peMarkedUsd").textContent=`$${calc.markedUpUsd.toFixed(2)}`;
+    $("peOriginalIqd").textContent=`${money(calc.originalPriceIQD)} د.ع`;
+    $("peSaleIqd").textContent=`${money(calc.salePriceIQD)} د.ع`;
   };
 
-  $("pePrice").addEventListener("input",updateDiscountPreview);
-  $("peSalePrice").addEventListener("input",updateDiscountPreview);
-  updateDiscountPreview();
+  $("peUsdPrice").addEventListener("input",refreshAutoPrice);
+  refreshAutoPrice();
 
   $("productForm").onsubmit=async e=>{
     e.preventDefault();
 
-    const originalPrice=Number($("pePrice").value);
-    const salePrice=Number($("peSalePrice").value);
+    const usdPrice=Number($("peUsdPrice").value);
+    if(!Number.isFinite(usdPrice) || usdPrice<=0){
+      return toast("أدخل سعراً صحيحاً بالدولار","bad");
+    }
 
-    if(!Number.isFinite(originalPrice) || originalPrice<=0)
-      return toast("أدخل سعراً صحيحاً قبل الخصم","bad");
-
-    if(!Number.isFinite(salePrice) || salePrice<0)
-      return toast("أدخل سعراً صحيحاً بعد الخصم","bad");
-
-    if(salePrice>originalPrice)
-      return toast("السعر بعد الخصم لا يمكن أن يكون أكبر من السعر الأصلي","bad");
-
-    const discount=calculateDiscountPercent(originalPrice,salePrice);
+    const calc=calculateAutoProductPricing(usdPrice);
 
     const data={
       name:$("peName").value.trim(),
       mainImage:$("peMain").value.trim(),
       images:$("peImages").value.split(/\n+/).map(x=>x.trim()).filter(Boolean),
-      price:originalPrice,
-      salePrice:salePrice,
-      discount:discount,
+
+      usdPrice:calc.usdPrice,
+      price:calc.originalPriceIQD,
+      salePrice:calc.salePriceIQD,
+      discount:AUTO_DISCOUNT_PERCENT,
+      exchangeRate:USD_TO_IQD,
+      markupPercent:PRICE_MARKUP_PERCENT,
+
       sizes:$("peSizes").value.split(",").map(x=>x.trim()).filter(Boolean),
       colors:$("peColors").value.split(/[,،]/).map(x=>x.trim()).filter(Boolean),
       categoryId:$("peCategory").value,
@@ -2597,7 +2713,7 @@ window.openProductEditor=(id="")=>{
       });
     }
 
-    toast(`تم حفظ المنتج • الخصم ${discount}%`,"ok");
+    toast(`تم حفظ المنتج • ${money(calc.originalPriceIQD)} ← ${money(calc.salePriceIQD)} د.ع`,"ok");
     closeModal();
   };
 };
@@ -2612,6 +2728,7 @@ function renderAdminProducts(){
           <tr>
             <th>المنتج</th>
             <th>الفئة</th>
+            <th>السعر $</th>
             <th>قبل الخصم</th>
             <th>بعد الخصم</th>
             <th>الخصم</th>
