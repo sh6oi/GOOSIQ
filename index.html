@@ -825,6 +825,161 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
   }
 }
 
+
+.admin-phone-link{color:#0866ff;font-weight:800;text-decoration:none;direction:ltr;display:inline-flex}
+.admin-phone-link:hover{text-decoration:underline}
+.muted-phone{color:#a28f98}
+.copy-order-btn{background:#eef5ff;color:#155bb5;border:1px solid #cfe0f7}
+.delete-order-btn{background:#fff0f0;color:#b42318;border:1px solid #f3c7c4}
+.admin-order-actions{display:flex;flex-wrap:wrap;gap:6px}
+.shipping-duration-row{color:#5f3f4d;background:#fff9fb;padding:8px 10px;border-radius:10px}
+
+@media(max-width:760px){
+  #adminApp .wrap{width:min(100% - 20px,1180px)}
+  #adminApp .header .nav{min-height:64px;height:auto;padding:10px 0}
+  #adminApp .logo{font-size:17px}
+  #adminApp .admin-layout{display:block}
+  #adminApp .side-menu{position:sticky;top:0;z-index:50;display:flex;gap:6px;overflow-x:auto;padding:8px;margin-bottom:12px;border-radius:14px;scrollbar-width:none}
+  #adminApp .side-menu::-webkit-scrollbar{display:none}
+  #adminApp .side-menu button{flex:0 0 auto;width:auto;min-width:max-content;margin:0;padding:9px 12px;font-size:11px}
+  #adminApp .kpis{grid-template-columns:1fr 1fr;gap:8px}
+  #adminApp .kpi{padding:12px}
+  #adminApp .kpi b{font-size:19px}
+  #adminApp .panel{padding:12px;border-radius:15px}
+  #adminApp .admin-top{align-items:stretch;flex-direction:column;gap:10px}
+  #adminApp .admin-top .input{max-width:none!important;width:100%!important}
+  #adminApp .toolbar{display:grid;grid-template-columns:1fr;gap:7px}
+  #adminApp .toolbar .input,#adminApp .toolbar button{width:100%;min-width:0}
+  #adminApp .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #adminApp .table{min-width:760px}
+  #adminApp .admin-order-actions{min-width:230px}
+}
+
+
+/* ===== Admin mobile card layout ===== */
+@media(max-width:760px){
+  #adminApp .table-wrap{
+    overflow:visible !important;
+    border:0 !important;
+  }
+  #adminApp .table{
+    display:block !important;
+    min-width:0 !important;
+    width:100% !important;
+  }
+  #adminApp .table thead{
+    display:none !important;
+  }
+  #adminApp .table tbody{
+    display:grid !important;
+    gap:11px !important;
+  }
+  #adminApp .table tr{
+    display:block !important;
+    width:100% !important;
+    background:#fff !important;
+    border:1px solid var(--line) !important;
+    border-radius:16px !important;
+    padding:11px !important;
+    box-shadow:0 8px 24px rgba(50,22,34,.06) !important;
+  }
+  #adminApp .table td{
+    display:grid !important;
+    grid-template-columns:96px minmax(0,1fr) !important;
+    gap:10px !important;
+    align-items:start !important;
+    width:100% !important;
+    min-width:0 !important;
+    padding:8px 2px !important;
+    border-bottom:1px dashed #eee2e7 !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+  }
+  #adminApp .table td:last-child{
+    border-bottom:0 !important;
+  }
+  #adminApp .table td::before{
+    color:#997c88;
+    font-size:9px;
+    font-weight:900;
+    line-height:1.7;
+  }
+
+  #admUsers .table td:nth-child(1)::before{content:"الاسم"}
+  #admUsers .table td:nth-child(2)::before{content:"اسم المستخدم"}
+  #admUsers .table td:nth-child(3)::before{content:"الهاتف"}
+  #admUsers .table td:nth-child(4)::before{content:"البريد"}
+  #admUsers .table td:nth-child(5)::before{content:"المحافظة"}
+  #admUsers .table td:nth-child(6)::before{content:"الإجراءات"}
+
+  #admOrders .table td:nth-child(1)::before{content:"رقم الطلب"}
+  #admOrders .table td:nth-child(2)::before{content:"الزبون"}
+  #admOrders .table td:nth-child(3)::before{content:"التاريخ"}
+  #admOrders .table td:nth-child(4)::before{content:"الإجمالي"}
+  #admOrders .table td:nth-child(5)::before{content:"العربون"}
+  #admOrders .table td:nth-child(6)::before{content:"الحالة"}
+  #admOrders .table td:nth-child(7)::before{content:"الإجراءات"}
+
+  #admProducts .table td:nth-child(1)::before{content:"المنتج"}
+  #admProducts .table td:nth-child(2)::before{content:"الفئة"}
+  #admProducts .table td:nth-child(3)::before{content:"قبل الخصم"}
+  #admProducts .table td:nth-child(4)::before{content:"بعد الخصم"}
+  #admProducts .table td:nth-child(5)::before{content:"الخصم"}
+  #admProducts .table td:nth-child(6)::before{content:"القياسات"}
+  #admProducts .table td:nth-child(7)::before{content:"الإجراءات"}
+
+  #adminApp .admin-order-actions{
+    min-width:0 !important;
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:6px !important;
+  }
+  #adminApp .admin-order-actions .btn{
+    width:100% !important;
+    padding:8px 5px !important;
+    font-size:9px !important;
+  }
+}
+
+
+/* ===== Support Button ===== */
+.support-whatsapp-btn{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  z-index:4500;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:11px 15px;
+  border-radius:999px;
+  background:#111;
+  color:#fff;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+  border:1px solid rgba(255,255,255,.12);
+  transition:.2s ease;
+}
+.support-whatsapp-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 34px rgba(0,0,0,.22);
+}
+.support-whatsapp-btn svg{
+  width:18px;
+  height:18px;
+  flex:0 0 auto;
+}
+@media(max-width:560px){
+  .support-whatsapp-btn{
+    left:12px;
+    bottom:12px;
+    padding:10px 13px;
+    font-size:11px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -852,7 +1007,7 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
       </div>
 
       <form id="loginForm" class="form">
-        <div class="field"><label>رقم الهاتف أو اسم المستخدم</label><input id="loginIdentifier" class="input" required autocomplete="username" placeholder="077... أو username أو admin@goosiq.com"></div>
+        <div class="field"><label>رقم الهاتف أو اسم المستخدم أو البريد الإلكتروني</label><input id="loginIdentifier" class="input" required autocomplete="username" placeholder="077... أو اسم المستخدم أو البريد الإلكتروني"></div>
         <div class="field"><label>كلمة المرور</label><input id="loginPassword" type="password" class="input" required autocomplete="current-password" placeholder="••••••••"></div>
         <button class="btn primary" type="submit">متابعة إلى حسابي</button>
         <button class="btn ghost" type="button" onclick="openReset()">نسيتِ كلمة المرور؟</button>
@@ -867,7 +1022,7 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
           <div class="field"><label>رقم إضافي (اختياري)</label><input id="regPhone2" class="input" maxlength="11" inputmode="numeric" placeholder="07xxxxxxxxx"></div>
         </div>
         <div class="field"><label>اسم المستخدم</label><input id="regUsername" class="input" required minlength="5" placeholder="مثال: sara25">
-          <div class="hint">5 أحرف أو أرقام على الأقل، ويجب أن يحتوي على حرف إنجليزي. نطاق @goosiq.com مخصص للإدارة فقط.</div>
+          <div class="hint">5 أحرف أو أرقام على الأقل، ويجب أن يحتوي على حرف إنجليزي.</div>
         </div>
         <div class="grid2">
           <div class="field"><label>المحافظة</label><select id="regProvince" class="input" required></select></div>
@@ -1095,6 +1250,7 @@ const db = getDatabase(app);
 
 const ADMIN_DOMAIN = "@goosiq.com";
 
+
 const PROVINCES = ["بغداد","البصرة","نينوى","أربيل","النجف","كربلاء","الأنبار","ديالى","كركوك","صلاح الدين","واسط","ميسان","ذي قار","المثنى","القادسية","بابل","دهوك","السليمانية","حلبجة"];
 const ORDER_STATUSES = ["قيد المعالجة","تم الشراء","قيد التجهيز","قيد الشحن من المتجر","وصل طلبك الى العراق وسوف يصلك خلال مدة لا تتجاوز 3 أيام","ملغي"];
 
@@ -1103,8 +1259,9 @@ const DEPOSIT_BASE_VALUE = 25000;
 const DEPOSIT_PER_BASE = 5000;
 
 function calculateDeposit(orderProductsValue){
-  // كل 25,000 د.ع من قيمة المنتجات يقابلها 5,000 د.ع عربون.
-  return Math.ceil((Number(orderProductsValue || 0) / DEPOSIT_BASE_VALUE) * DEPOSIT_PER_BASE);
+  const value = Number(orderProductsValue || 0);
+  if(value < MIN_ORDER_VALUE) return 0;
+  return Math.floor(value / DEPOSIT_BASE_VALUE) * DEPOSIT_PER_BASE;
 }
 
 function isPurchasedOrLater(status){
@@ -1141,8 +1298,80 @@ const normPhone = s=>String(s||"").replace(/\D/g,"");
 const money = n=>Number(n||0).toLocaleString("en-US");
 const uid = ()=>auth.currentUser?.uid;
 
-function isAdminAccount(){
-  const email = String(auth.currentUser?.email || "").toLowerCase();
+function whatsappNumber(phone){
+  let p = String(phone || "").replace(/\D/g,"");
+  if(!p) return "";
+  if(p.startsWith("00964")) p = p.slice(2);
+  if(p.startsWith("964")) return p;
+  if(p.startsWith("0")) p = p.slice(1);
+  return "964" + p;
+}
+function whatsappHref(phone){
+  const n = whatsappNumber(phone);
+  return n ? `https://wa.me/${n}` : "#";
+}
+function adminPhoneHTML(phone){
+  const p = String(phone || "").trim();
+  if(!p) return `<span class="muted-phone">-</span>`;
+  return `<a class="admin-phone-link" href="${whatsappHref(p)}" target="_blank" rel="noopener noreferrer">${esc(p)}</a>`;
+}
+async function copyTextSafe(value){
+  const txt = String(value || "");
+  try{
+    await navigator.clipboard.writeText(txt);
+    return true;
+  }catch(_){
+    try{
+      const ta=document.createElement("textarea");
+      ta.value=txt;
+      ta.style.position="fixed";
+      ta.style.opacity="0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      return true;
+    }catch(err){
+      console.error("Copy failed:",err);
+      return false;
+    }
+  }
+}
+window.copyOrderDetails=async(id)=>{
+  const o=adminOrders[id];
+  if(!o) return toast("تعذر العثور على الطلب","bad");
+  const items = Array.isArray(o.items) ? o.items : Object.values(o.items||{});
+  const productsText = items.map((x,i)=>
+    `${i+1}- ${x.name||"منتج"} | القياس: ${x.size||"-"} | اللون: ${x.color||"-"} | الكمية: ${Number(x.qty||1)} | السعر: ${money(Number(x.unitPrice||0)*Number(x.qty||1))} د.ع`
+  ).join("\n");
+  const details = [
+    `رقم الطلب: #${o.orderNumber||o.id||""}`,
+    `الاسم: ${o.customerName||""}`,
+    `رقم الهاتف: ${o.phone1||""}`,
+    o.phone2 ? `رقم الهاتف الثاني: ${o.phone2}` : "",
+    `المحافظة: ${o.province||""}`,
+    `العنوان: ${o.address||""}`,
+    `الحالة: ${o.status||""}`,
+    `مدة الشحن: ${o.shippingDuration||"14-18 يوم"}`,
+    "",
+    "المنتجات:",
+    productsText || "-",
+    "",
+    `السعر قبل الخصم: ${money(o.originalSubtotal||0)} د.ع`,
+    `السعر بعد الخصم: ${money(o.subtotal||0)} د.ع`,
+    `التوصيل: ${Number(o.delivery||0) ? money(o.delivery)+" د.ع" : "مجاني"}`,
+    `الإجمالي النهائي: ${money(o.total||0)} د.ع`,
+    `العربون: ${money(o.depositRequired||0)} د.ع`,
+    isPurchasedOrLater(o.status) ? `المتبقي بعد العربون: ${money(remainingAfterDeposit(o))} د.ع` : ""
+  ].filter(Boolean).join("\n");
+  const ok=await copyTextSafe(details);
+  toast(ok?"تم نسخ تفاصيل الطلب":"تعذر نسخ التفاصيل",ok?"ok":"bad");
+};
+
+
+function userHasAdminAccess(user){
+  if(!user) return false;
+  const email = String(user.email || "").trim().toLowerCase();
   return email.endsWith(ADMIN_DOMAIN);
 }
 
@@ -1253,16 +1482,11 @@ $("registerForm").addEventListener("submit",async(e)=>{
   if(!validateName(name)) return toast("الاسم يجب أن يكون ثلاثياً على الأقل","bad");
   if(!validatePhone(phone1)) return toast("رقم الهاتف الأساسي غير صحيح","bad");
   if(phone2 && !validatePhone(phone2)) return toast("رقم إضافي غير صحيح","bad");
-
-  // نطاق GOOSIQ مخصص حصراً لحسابات الإدارة ولا يمكن استخدامه في حسابات الزبائن.
-  if(email.endsWith(ADMIN_DOMAIN))
-    return toast("لا يمكن استخدام بريد ينتهي بـ @goosiq.com في حساب المستخدم","bad");
-
-  if(username.endsWith(ADMIN_DOMAIN) || username.includes("@goosiq.com"))
-    return toast("لا يمكن استخدام @goosiq.com ضمن اسم المستخدم","bad");
-
   if(!validateUsername(username))
     return toast("اسم المستخدم 5 أحرف/أرقام على الأقل ويجب أن يحتوي حرفاً إنجليزياً","bad");
+
+  if(email.endsWith(ADMIN_DOMAIN))
+    return toast("هذا البريد مخصص لحسابات الإدارة","bad");
 
   if(!province) return toast("يرجى اختيار المحافظة","bad");
   if(address.length<4) return toast("يرجى إدخال عنوان واضح للتوصيل","bad");
@@ -1293,7 +1517,8 @@ $("loginForm").addEventListener("submit",async(e)=>{
       if(!s.exists()) return toast("الحساب غير موجود","bad");
       email=s.val().email;
     }
-    await signInWithEmailAndPassword(auth,email,password);
+    const cred = await signInWithEmailAndPassword(auth,email,password);
+    console.log("[GOOSIQ] Login successful. UID:",cred.user.uid);
   }catch(err){ console.error(err); toast(firebaseMessage(err),"bad"); }
 });
 
@@ -1326,14 +1551,20 @@ function firebaseMessage(err){
 onAuthStateChanged(auth,async user=>{
   if(!user){ currentUser=null; currentProfile=null; guestMode=true; showPage("store"); updateAccountNav(); return; }
   guestMode=false; currentUser=user;
-  const isAdmin=(user.email||"").toLowerCase().endsWith(ADMIN_DOMAIN);
+  const isAdmin=userHasAdminAccess(user);
   if(isAdmin){
     showPage("admin");
     subscribeAdmin();
   }else{
     const s=await get(ref(db,`users/${user.uid}`));
     currentProfile=s.val()||null;
-    if(!currentProfile){ toast("تعذر تحميل بيانات الحساب","bad"); await signOut(auth); return; }
+
+    if(!currentProfile){
+      toast("تعذر تحميل بيانات الحساب","bad");
+      await signOut(auth);
+      return;
+    }
+
     showPage("store"); updateStoreAuthButtons(); subscribeCart(); fillProfile(); goHome();
   }
 });
@@ -1506,12 +1737,13 @@ window.openCart=()=>{
         <div class="sum-row"><span>بعد الخصم</span><b>${money(subtotal)} د.ع</b></div>
         <div class="sum-row"><span>الشحن من المتجر</span><b>مجاناً</b></div>
         <div class="sum-row"><span>التوصيل إلى بابكِ</span><b>${delivery?money(delivery)+" د.ع":"مجاناً"}</b></div>
+        <div class="sum-row shipping-duration-row"><span>مدة الشحن المتوقعة</span><b>14-18 يوم</b></div>
         <div class="sum-row total"><span>الإجمالي النهائي</span><b>${money(grand)} د.ع</b></div>
         <div class="sum-row">
           <span>العربون المطلوب</span>
           <b style="color:var(--brand)">${money(deposit)} د.ع</b>
         </div>
-        <div class="deposit-rule-note">كل 25,000 د.ع من قيمة المنتجات يقابلها 5,000 د.ع عربون.</div>
+        <div class="deposit-rule-note">العربون 5,000 د.ع للطلبات من 25,000 حتى 49,999 د.ع، ويزداد 5,000 د.ع مع كل 25,000 د.ع إضافية.</div>
       </div>
 
       ${belowMinimum
@@ -1544,7 +1776,7 @@ window.openCheckout=()=>{
     <form id="checkoutForm" class="form">
       <div class="checkout-rule-card">
         <b>نظام العربون</b>
-        <span>كل 25,000 د.ع من قيمة المنتجات يقابلها عربون قدره 5,000 د.ع.</span>
+        <span>العربون 5,000 د.ع للطلبات من 25,000 حتى 49,999 د.ع، ثم 10,000 د.ع من 50,000 حتى 74,999 د.ع، وهكذا.</span>
       </div>
 
       <div class="grid2">
@@ -1562,6 +1794,7 @@ window.openCheckout=()=>{
       <div class="summary">
         <div class="sum-row"><span>قيمة المنتجات بعد الخصم</span><b>${money(subtotal)} د.ع</b></div>
         <div class="sum-row"><span>التوصيل</span><b>${delivery?money(delivery)+" د.ع":"مجاناً"}</b></div>
+        <div class="sum-row shipping-duration-row"><span>مدة الشحن المتوقعة</span><b>14-18 يوم</b></div>
         <div class="sum-row total"><span>الإجمالي النهائي</span><b>${money(grand)} د.ع</b></div>
         <div class="sum-row"><span>العربون المطلوب الآن</span><b>${money(deposit)} د.ع</b></div>
       </div>
@@ -1667,7 +1900,7 @@ async function placeOrder(){
   const total=subtotal+delivery;
   const deposit=calculateDeposit(subtotal);
   const orderId=push(ref(db,"orders")).key, orderNumber=generateOrderNumber();
-  const order={id:orderId,orderNumber,userId:uid(),customerName:currentProfile.name,username:currentProfile.username,phone1,phone2,province,address,items:lineItems,originalSubtotal,subtotal,shipping:0,delivery,total,depositRequired:deposit,depositPaid:0,paymentStatus:"بانتظار إكمال إجراءات العربون عبر الموظف",status:"قيد المعالجة",createdAt:Date.now(),updatedAt:Date.now()};
+  const order={id:orderId,orderNumber,userId:uid(),customerName:currentProfile.name,username:currentProfile.username,phone1,phone2,province,address,items:lineItems,originalSubtotal,subtotal,shipping:0,delivery,total,depositRequired:deposit,depositPaid:0,paymentStatus:"بانتظار إكمال إجراءات العربون عبر الموظف",shippingDuration:"14-18 يوم",status:"قيد المعالجة",createdAt:Date.now(),updatedAt:Date.now()};
   const updates={};
   updates[`orders/${orderId}`]=order;
 
@@ -1956,6 +2189,7 @@ window.showUserOrderDetails=async(id)=>{
         <div class="sum-row"><span>بعد الخصم</span><b>${money(order.subtotal)} د.ع</b></div>
         <div class="sum-row"><span>الشحن</span><b>مجاني</b></div>
         <div class="sum-row"><span>التوصيل</span><b>${order.delivery?money(order.delivery)+" د.ع":"مجاني"}</b></div>
+        <div class="sum-row shipping-duration-row"><span>مدة الشحن المتوقعة</span><b>${esc(order.shippingDuration||"14-18 يوم")}</b></div>
         <div class="sum-row total"><span>الإجمالي</span><b>${money(order.total)} د.ع</b></div>
         <div class="sum-row"><span>العربون</span><b>${money(order.depositRequired)} د.ع</b></div>
         ${isPurchasedOrLater(order.status)?`
@@ -2022,7 +2256,60 @@ function subscribeAdmin(){
   );
 
   populateStatusSelects();
+  startPendingOrdersCleanup();
 }
+
+const PENDING_AUTO_DELETE_MS = 48 * 60 * 60 * 1000;
+let pendingCleanupTimer = null;
+
+async function deleteOrderEverywhere(order){
+  if(!order?.id) return;
+  const updates = {};
+  updates[`orders/${order.id}`] = null;
+  if(order.userId) updates[`userOrders/${order.userId}/${order.id}`] = null;
+  await update(ref(db),updates);
+}
+
+window.deleteAdminOrder=async(id)=>{
+  const order=adminOrders[id];
+  if(!order) return toast("الطلب غير موجود","bad");
+  if(!confirm(`هل تريد حذف الطلب #${order.orderNumber||id} نهائيًا؟`)) return;
+  try{
+    await deleteOrderEverywhere(order);
+    toast("تم حذف الطلب","ok");
+  }catch(err){
+    console.error("delete order:",err);
+    toast("تعذر حذف الطلب","bad");
+  }
+};
+
+async function cleanupExpiredPendingOrders(){
+  const now=Date.now();
+  const expired=Object.values(adminOrders).filter(o=>
+    o && o.status==="قيد المعالجة" &&
+    Number(o.createdAt||0)>0 &&
+    now-Number(o.createdAt)>=PENDING_AUTO_DELETE_MS
+  );
+  if(!expired.length) return;
+  try{
+    const multi={};
+    expired.forEach(o=>{
+      multi[`orders/${o.id}`]=null;
+      if(o.userId) multi[`userOrders/${o.userId}/${o.id}`]=null;
+    });
+    await update(ref(db),multi);
+    console.log(`[GOOSIQ] Auto-deleted ${expired.length} expired pending orders.`);
+  }catch(err){
+    console.error("Pending order cleanup failed:",err);
+  }
+}
+
+function startPendingOrdersCleanup(){
+  clearInterval(pendingCleanupTimer);
+  cleanupExpiredPendingOrders();
+  pendingCleanupTimer=setInterval(cleanupExpiredPendingOrders,60*60*1000);
+}
+
 function populateStatusSelects(){
   $("adminOrderStatus").innerHTML=`<option value="">كل الحالات</option>`+ORDER_STATUSES.map(x=>`<option>${x}</option>`).join("");
   $("bulkStatus").innerHTML=ORDER_STATUSES.map(x=>`<option>${x}</option>`).join("");
@@ -2045,7 +2332,7 @@ window.renderAdminUsers=()=>{
   const q=normUser($("adminUserSearch")?.value||"");
   const arr=Object.entries(adminUsers).filter(([id,u])=>!q||normUser([u.name,u.username,u.phone1,u.email].join(" ")).includes(q));
   $("adminUsersTable").innerHTML=`<div class="table-wrap"><table class="table"><thead><tr><th>الاسم</th><th>اسم المستخدم</th><th>الهاتف</th><th>البريد</th><th>المحافظة</th><th>إجراءات</th></tr></thead><tbody>
-  ${arr.map(([id,u])=>`<tr><td>${esc(u.name)}</td><td>${esc(u.username)}</td><td>${esc(u.phone1)}</td><td>${esc(u.email)}</td><td>${esc(u.province||"-")}</td><td><button class="btn secondary small" onclick="editUser('${id}')">تعديل</button></td></tr>`).join("")}
+  ${arr.map(([id,u])=>`<tr><td>${esc(u.name)}</td><td>${esc(u.username)}</td><td>${adminPhoneHTML(u.phone1)}${u.phone2?`<br>${adminPhoneHTML(u.phone2)}`:""}</td><td>${esc(u.email)}</td><td>${esc(u.province||"-")}</td><td><button class="btn secondary small" onclick="editUser('${id}')">تعديل</button></td></tr>`).join("")}
   </tbody></table></div>`;
 };
 window.editUser=id=>{
@@ -2082,9 +2369,15 @@ window.renderAdminOrders=()=>{
     return true;
   }).sort((a,b)=>sort==="new"?b.createdAt-a.createdAt:a.createdAt-b.createdAt);
   $("adminOrdersTable").innerHTML=`<div class="table-wrap"><table class="table"><thead><tr><th>رقم الطلب</th><th>الزبون</th><th>التاريخ</th><th>الإجمالي النهائي</th><th>العربون</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>
-  ${arr.map(o=>`<tr><td>#${esc(o.orderNumber)}</td><td>${esc(o.customerName)}<br><span class="hint">${esc(o.phone1)}</span></td><td>${new Date(o.createdAt).toLocaleString("ar-IQ")}</td><td>${money(o.total)} د.ع</td><td>${money(o.depositRequired)} د.ع</td>
+  ${arr.map(o=>`<tr><td>#${esc(o.orderNumber)}</td><td>${esc(o.customerName)}<br>${adminPhoneHTML(o.phone1)}${o.phone2?`<br>${adminPhoneHTML(o.phone2)}`:""}</td><td>${new Date(o.createdAt).toLocaleString("ar-IQ")}</td><td>${money(o.total)} د.ع</td><td>${money(o.depositRequired)} د.ع</td>
   <td><div style="display:grid;gap:7px">${renderOrderStatus(o.status)}<select class="input" onchange="changeOrderStatus('${o.id}',this.value)">${ORDER_STATUSES.map(x=>`<option ${x===o.status?"selected":""}>${x}</option>`).join("")}</select></div></td>
-  <td><button class="btn secondary small" onclick="showOrderDetails('${o.id}',true)">تفاصيل</button> <button class="btn secondary small" onclick="editOrderNumber('${o.id}')">رقم الطلب</button> <button class="btn danger small" onclick="cancelOrder('${o.id}')">إلغاء</button></td></tr>`).join("")}
+  <td><div class="admin-order-actions">
+<button class="btn secondary small" onclick="showOrderDetails('${o.id}',true)">تفاصيل</button>
+<button class="btn copy-order-btn small" onclick="copyOrderDetails('${o.id}')">نسخ التفاصيل</button>
+<button class="btn secondary small" onclick="editOrderNumber('${o.id}')">رقم الطلب</button>
+<button class="btn danger small" onclick="cancelOrder('${o.id}')">إلغاء</button>
+<button class="btn delete-order-btn small" onclick="deleteAdminOrder('${o.id}')">حذف</button>
+</div></td></tr>`).join("")}
   </tbody></table></div>`;
 };
 window.changeOrderStatus=async(id,status)=>{
@@ -2158,6 +2451,7 @@ window.showOrderDetails=(id,isAdmin)=>{
         <div class="sum-row"><span>بعد الخصم</span><b>${money(order.subtotal)} د.ع</b></div>
         <div class="sum-row"><span>الشحن من المتجر</span><b>مجاناً</b></div>
         <div class="sum-row"><span>التوصيل إلى بابكِ</span><b>${order.delivery?money(order.delivery)+" د.ع":"مجاناً"}</b></div>
+        <div class="sum-row shipping-duration-row"><span>مدة الشحن المتوقعة</span><b>${esc(order.shippingDuration||"14-18 يوم")}</b></div>
         <div class="sum-row total"><span>الإجمالي النهائي</span><b>${money(order.total)} د.ع</b></div>
         <div class="sum-row"><span>العربون</span><b>${money(order.depositRequired)} د.ع</b></div>
         ${isPurchasedOrLater(order.status)?`
@@ -2365,5 +2659,18 @@ window.deleteCategory=async id=>{
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
 updateStoreAuthButtons();
 </script>
+
+<a class="support-whatsapp-btn"
+   href="https://wa.me/message/LPX3FF4TG4XWK1"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="الدعم عبر واتساب"
+   title="الدعم عبر واتساب">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M20.52 3.48A11.78 11.78 0 0 0 12.08 0C5.54 0 .22 5.32.22 11.86c0 2.09.55 4.13 1.6 5.92L.12 24l6.37-1.67a11.84 11.84 0 0 0 5.58 1.42h.01c6.54 0 11.86-5.32 11.86-11.86 0-3.17-1.21-6.15-3.42-8.41ZM12.08 21.74h-.01a9.82 9.82 0 0 1-5.01-1.37l-.36-.21-3.78.99 1.01-3.68-.23-.38a9.84 9.84 0 0 1-1.51-5.23c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.9 7c-.01 5.45-4.45 9.87-9.9 9.87Zm5.42-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.11 3.22 5.1 4.51.71.31 1.27.49 1.7.63.71.23 1.36.19 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.08-.13-.27-.2-.57-.35Z"/>
+  </svg>
+  <span>الدعم</span>
+</a>
+
 </body>
 </html>
