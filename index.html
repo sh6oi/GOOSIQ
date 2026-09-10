@@ -91,11 +91,18 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
   box-shadow:0 12px 28px rgba(77,28,51,.13);
 }
 .premium-cart .cart-icon{
-  width:27px;height:27px;border-radius:50%;
-  display:grid;place-items:center;
-  background:#7b294d;color:#fff;
-  font-size:18px;line-height:1;
-  transform:rotate(180deg);
+  width:29px;
+  height:29px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:transparent;
+  color:#000;
+  line-height:1;
+}
+.premium-cart .cart-icon svg{
+  display:block;
+  stroke:#000;
 }
 .premium-cart .cart-label{font-weight:800;font-size:13px}
 .premium-cart .badge{
@@ -129,7 +136,17 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
 @media(max-width:560px){
   .premium-cart{min-width:46px;width:46px;padding:0;border-radius:50%}
   .premium-cart .cart-label{display:none}
-  .premium-cart .cart-icon{background:transparent;color:#7b294d;width:auto;height:auto}
+  .premium-cart .cart-icon{
+    background:transparent;
+    color:#000;
+    width:auto;
+    height:auto;
+  }
+  .premium-cart .cart-icon svg{
+    stroke:#000;
+    width:20px;
+    height:20px;
+  }
   .premium-cart .badge{top:-4px;left:-5px}
 }
 
@@ -336,6 +353,478 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
   }
 }
 
+
+/* ===== Order minimum, deposit & return policy ===== */
+.minimum-order-alert{
+  margin-top:14px;
+  padding:14px 16px;
+  border:1px solid #f0c8c5;
+  border-radius:16px;
+  background:#fff4f3;
+  color:#8e2923;
+  display:grid;
+  gap:4px;
+}
+.minimum-order-alert b{font-size:13px}
+.minimum-order-alert span{font-size:11px;line-height:1.8}
+.disabled-order-btn{opacity:.5;cursor:not-allowed;transform:none!important}
+.deposit-rule-note{
+  padding-top:8px;
+  color:#8d727e;
+  font-size:10px;
+  line-height:1.8;
+  border-top:1px dashed #e6d5dc;
+}
+.checkout-rule-card{
+  display:grid;
+  gap:5px;
+  padding:14px 16px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#fff7fa,#f9edf2);
+  border:1px solid #ead7df;
+  color:#6d314a;
+}
+.checkout-rule-card b{font-size:14px}
+.checkout-rule-card span{font-size:11px;line-height:1.8;color:#866b76}
+.return-policy-box{
+  border:1px solid #eadbe1;
+  border-radius:16px;
+  background:#fffafb;
+  overflow:hidden;
+}
+.return-policy-box summary{
+  cursor:pointer;
+  padding:14px 16px;
+  font-weight:900;
+  color:#71304d;
+  list-style:none;
+}
+.return-policy-box summary::-webkit-details-marker{display:none}
+.return-policy-content{
+  padding:8px 16px 16px;
+  line-height:2;
+  color:#5f4b54;
+}
+.return-policy-content h3{
+  color:#6f2948;
+  margin:5px 0 8px;
+}
+.policy-item{
+  margin-top:12px;
+  padding:13px 14px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid #f0e4e8;
+}
+.policy-item b{color:#512337}
+.policy-item p{margin:6px 0 0;font-size:12px}
+.warning-policy{background:#fff9ea;border-color:#f1dfb5}
+.policy-note{
+  margin:14px 0 0;
+  padding:12px 14px;
+  border-radius:14px;
+  background:#fff6d9;
+}
+.policy-confirm{
+  display:flex;
+  gap:9px;
+  align-items:flex-start;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid #eadde3;
+  background:#fff;
+  line-height:1.8;
+  font-size:12px;
+}
+.policy-confirm input{margin-top:5px}
+.policy-section{padding-top:10px}
+.policy-teaser-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding:26px 28px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#fff,#f8edf2);
+  border:1px solid #eadde3;
+  box-shadow:0 12px 32px rgba(60,26,42,.06);
+}
+.policy-teaser-card h2{margin:5px 0 7px}
+.policy-teaser-card p{max-width:720px;margin:0;color:#8b727d;line-height:1.9}
+.policy-open-btn{white-space:nowrap}
+.remaining-row{
+  margin-top:5px;
+  padding:13px 14px;
+  border-radius:14px;
+  background:#edf8f3;
+  color:#176b4d;
+  border:1px solid #cde8dc;
+  font-size:15px;
+  font-weight:900;
+}
+@media(max-width:620px){
+  .policy-teaser-card{display:grid;padding:20px}
+  .policy-open-btn{width:100%}
+  .return-policy-content{padding:6px 12px 14px}
+  .policy-item{padding:11px 12px}
+  .remaining-row{font-size:13px}
+}
+
+
+/* ===== إبراز السعر الأصلي والخصم ===== */
+.product .discount{
+  top:12px;
+  right:12px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#111;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.45);
+  box-shadow:0 8px 22px rgba(0,0,0,.22);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.01em;
+}
+.product .discount::before{
+  content:"خصم ";
+}
+
+.price{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+  margin:10px 0 6px;
+}
+
+.new-price{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:5px 10px;
+  border-radius:10px;
+  background:#111;
+  color:#fff !important;
+  font-size:18px;
+  font-weight:900;
+  line-height:1.3;
+  box-shadow:0 6px 15px rgba(0,0,0,.10);
+}
+
+.old-price{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 9px;
+  border-radius:10px;
+  background:#fff3f5;
+  color:#9b2f4e !important;
+  border:1px solid #f0ccd7;
+  font-size:12px;
+  font-weight:800;
+  text-decoration:line-through;
+  text-decoration-thickness:2px;
+  text-decoration-color:#c33f66;
+}
+
+.old-price::before{
+  content:"قبل";
+  text-decoration:none;
+  display:inline-block;
+  font-size:9px;
+  font-weight:900;
+  color:#b45572;
+  background:#fff;
+  border:1px solid #efd6df;
+  padding:2px 5px;
+  border-radius:999px;
+}
+
+.saving-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-top:3px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#eef8f2;
+  border:1px solid #cfe9da;
+  color:#176b4d;
+  font-size:10px;
+  font-weight:900;
+}
+
+.product-detail-price-box{
+  padding:15px;
+  border:1px solid #eadde3;
+  border-radius:16px;
+  background:linear-gradient(135deg,#fff,#fff8fa);
+  margin:12px 0 16px;
+}
+.product-detail-price-box .price{
+  margin:0 0 8px;
+}
+.product-detail-price-box .new-price{
+  font-size:25px;
+  padding:8px 13px;
+}
+.product-detail-price-box .old-price{
+  font-size:14px;
+  padding:7px 10px;
+}
+.detail-discount-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.detail-discount-pill{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#111;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+}
+.detail-saving{
+  color:#176b4d;
+  font-size:11px;
+  font-weight:900;
+}
+
+@media(max-width:560px){
+  .product .discount{
+    top:8px;
+    right:8px;
+    padding:6px 9px;
+    font-size:9px;
+  }
+  .new-price{
+    font-size:14px;
+    min-height:30px;
+    padding:5px 8px;
+  }
+  .old-price{
+    font-size:10px;
+    padding:4px 7px;
+  }
+  .old-price::before{
+    font-size:8px;
+  }
+  .saving-badge{
+    font-size:9px;
+    padding:4px 7px;
+  }
+}
+
+
+/* ===== Elegant fashion discount styling ===== */
+.product .discount{
+  top:12px !important;
+  right:12px !important;
+  padding:7px 12px !important;
+  border-radius:999px !important;
+  background:linear-gradient(135deg,#7d2f50 0%,#b85f82 100%) !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.55) !important;
+  box-shadow:0 10px 24px rgba(111,43,72,.20) !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:.01em !important;
+  backdrop-filter:blur(8px);
+}
+.product .discount::before{
+  content:"خصم " !important;
+  font-weight:700;
+}
+
+.price{
+  display:flex !important;
+  align-items:center !important;
+  gap:9px !important;
+  flex-wrap:wrap !important;
+  margin:10px 0 6px !important;
+}
+
+.new-price{
+  display:inline-flex !important;
+  align-items:center !important;
+  min-height:auto !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:#2e2026 !important;
+  font-size:18px !important;
+  font-weight:900 !important;
+  line-height:1.4 !important;
+  box-shadow:none !important;
+}
+
+.old-price{
+  position:relative !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:4px !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:#a28f97 !important;
+  border:0 !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+  text-decoration:line-through !important;
+  text-decoration-thickness:1.5px !important;
+  text-decoration-color:#b99ea9 !important;
+}
+.old-price::before{
+  content:"" !important;
+  display:none !important;
+}
+
+.saving-badge{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:5px !important;
+  margin-top:4px !important;
+  padding:5px 10px !important;
+  border-radius:999px !important;
+  background:linear-gradient(135deg,#fff5f8,#fbeaf0) !important;
+  border:1px solid #efd5df !important;
+  color:#8c3b5c !important;
+  font-size:9.5px !important;
+  font-weight:800 !important;
+  box-shadow:none !important;
+}
+
+.product-detail-price-box{
+  padding:16px !important;
+  border:1px solid #eadde3 !important;
+  border-radius:18px !important;
+  background:linear-gradient(145deg,#ffffff 0%,#fff8fb 100%) !important;
+  margin:12px 0 16px !important;
+  box-shadow:0 10px 28px rgba(73,35,52,.06) !important;
+}
+
+.product-detail-price-box .new-price{
+  font-size:28px !important;
+  color:#2b1b22 !important;
+}
+
+.product-detail-price-box .old-price{
+  font-size:14px !important;
+  color:#aa969e !important;
+}
+
+.detail-discount-line{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  flex-wrap:wrap !important;
+  margin-top:8px !important;
+}
+
+.detail-discount-pill{
+  display:inline-flex !important;
+  align-items:center !important;
+  padding:6px 11px !important;
+  border-radius:999px !important;
+  background:linear-gradient(135deg,#7d2f50 0%,#b85f82 100%) !important;
+  color:#fff !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  box-shadow:0 7px 18px rgba(125,47,80,.16) !important;
+}
+
+.detail-saving{
+  color:#8f5269 !important;
+  font-size:10.5px !important;
+  font-weight:700 !important;
+}
+
+@media(max-width:560px){
+  .product .discount{
+    top:8px !important;
+    right:8px !important;
+    padding:6px 9px !important;
+    font-size:8.5px !important;
+  }
+  .new-price{
+    font-size:14px !important;
+  }
+  .old-price{
+    font-size:10px !important;
+  }
+  .saving-badge{
+    font-size:8.5px !important;
+    padding:4px 8px !important;
+  }
+  .product-detail-price-box .new-price{
+    font-size:24px !important;
+  }
+}
+
+
+/* ===== Automatic discount calculator ===== */
+.auto-discount-preview{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:13px;
+  border:1px solid #ead7df;
+  border-radius:16px;
+  background:linear-gradient(135deg,#fff8fb,#fff);
+  transition:.2s ease;
+}
+.auto-discount-preview > div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid #f1e5ea;
+}
+.auto-discount-preview span{
+  font-size:10px;
+  color:#8b717c;
+  font-weight:700;
+}
+.auto-discount-preview b{
+  color:#7d2f50;
+  font-size:15px;
+  font-weight:900;
+}
+.auto-discount-preview.invalid-price{
+  border-color:#e9a7a3;
+  background:#fff3f2;
+}
+.admin-old-price{
+  color:#a08b94;
+  text-decoration:line-through;
+  text-decoration-thickness:1.5px;
+}
+.admin-discount-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:48px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#7d2f50,#b85f82);
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+}
+@media(max-width:560px){
+  .auto-discount-preview{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -378,7 +867,7 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
           <div class="field"><label>رقم إضافي (اختياري)</label><input id="regPhone2" class="input" maxlength="11" inputmode="numeric" placeholder="07xxxxxxxxx"></div>
         </div>
         <div class="field"><label>اسم المستخدم</label><input id="regUsername" class="input" required minlength="5" placeholder="مثال: sara25">
-          <div class="hint">5 أحرف أو أرقام على الأقل، ويجب أن يحتوي على حرف إنجليزي.فقط.</div>
+          <div class="hint">5 أحرف أو أرقام على الأقل، ويجب أن يحتوي على حرف إنجليزي. نطاق @goosiq.com مخصص للإدارة فقط.</div>
         </div>
         <div class="grid2">
           <div class="field"><label>المحافظة</label><select id="regProvince" class="input" required></select></div>
@@ -406,7 +895,12 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
       <button class="icon-nav" onclick="focusStoreSearch()" aria-label="بحث">⌕</button>
       <button id="accountNavBtn" class="icon-nav account-nav" onclick="handleAccountClick()" aria-label="الحساب">♙</button>
       <button class="cart-nav premium-cart" onclick="openCart()" aria-label="سلة التسوق">
-        <span class="cart-icon">⌑</span>
+        <span class="cart-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8h12l1 12H5L6 8Z"></path>
+            <path d="M9 9V6a3 3 0 0 1 6 0v3"></path>
+          </svg>
+        </span>
         <span class="cart-label">السلة</span>
         <b id="cartBadge" class="badge">0</b>
       </button>
@@ -443,7 +937,7 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
             <button class="btn fashion-primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">اكتشفي جديدنا</button>
           </div>
           <div class="service-strip">
-            <div><b>25%</b><span>عربون الطلب</span></div>
+            <div><b>5K / 25K</b><span>نظام العربون</span></div>
             <div><b>3,000</b><span>توصيل لكل العراق</span></div>
             <div><b>100K+</b><span>توصيل مجاناً</span></div>
           </div>
@@ -463,6 +957,20 @@ body{background:var(--paper);color:var(--ink);letter-spacing:.01em}.wrap{width:m
       <div id="productsGrid" class="products"></div>
     </div>
   </section>
+
+  <section class="section policy-section">
+    <div class="wrap">
+      <div class="policy-teaser-card">
+        <div>
+          <span class="micro-title dark">SHOP WITH CONFIDENCE</span>
+          <h2>📦 سياسة التعويض والاسترجاع</h2>
+          <p>حقوقكِ مهمة بالنسبة لنا. اطلعي على تفاصيل التعويض، اختلاف القياس أو اللون، وشروط تأكيد الطلب قبل الشراء.</p>
+        </div>
+        <button class="btn secondary policy-open-btn" onclick="openReturnPolicy()">عرض السياسة كاملة</button>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <section id="accountView" class="section hidden"><div class="wrap profile-layout">
@@ -589,6 +1097,29 @@ const ADMIN_DOMAIN = "@goosiq.com";
 
 const PROVINCES = ["بغداد","البصرة","نينوى","أربيل","النجف","كربلاء","الأنبار","ديالى","كركوك","صلاح الدين","واسط","ميسان","ذي قار","المثنى","القادسية","بابل","دهوك","السليمانية","حلبجة"];
 const ORDER_STATUSES = ["قيد المعالجة","تم الشراء","قيد التجهيز","قيد الشحن من المتجر","وصل طلبك الى العراق وسوف يصلك خلال مدة لا تتجاوز 3 أيام","ملغي"];
+
+const MIN_ORDER_VALUE = 25000;
+const DEPOSIT_BASE_VALUE = 25000;
+const DEPOSIT_PER_BASE = 5000;
+
+function calculateDeposit(orderProductsValue){
+  // كل 25,000 د.ع من قيمة المنتجات يقابلها 5,000 د.ع عربون.
+  return Math.ceil((Number(orderProductsValue || 0) / DEPOSIT_BASE_VALUE) * DEPOSIT_PER_BASE);
+}
+
+function isPurchasedOrLater(status){
+  return [
+    "تم الشراء",
+    "قيد التجهيز",
+    "قيد الشحن",
+    "قيد الشحن من المتجر",
+    "وصل طلبك الى العراق وسوف يصلك خلال مدة لا تتجاوز 3 أيام"
+  ].includes(String(status || ""));
+}
+
+function remainingAfterDeposit(order){
+  return Math.max(0, Number(order?.total || 0) - Number(order?.depositRequired || 0));
+}
 
 let currentUser = null;
 let currentProfile = null;
@@ -725,10 +1256,10 @@ $("registerForm").addEventListener("submit",async(e)=>{
 
   // نطاق GOOSIQ مخصص حصراً لحسابات الإدارة ولا يمكن استخدامه في حسابات الزبائن.
   if(email.endsWith(ADMIN_DOMAIN))
-    return toast("لا يمكن استخدام هذا النطاق","bad");
+    return toast("لا يمكن استخدام بريد ينتهي بـ @goosiq.com في حساب المستخدم","bad");
 
   if(username.endsWith(ADMIN_DOMAIN) || username.includes("@goosiq.com"))
-    return toast(" لا يمكن استخدام اسم المستخدم","bad");
+    return toast("لا يمكن استخدام @goosiq.com ضمن اسم المستخدم","bad");
 
   if(!validateUsername(username))
     return toast("اسم المستخدم 5 أحرف/أرقام على الأقل ويجب أن يحتوي حرفاً إنجليزياً","bad");
@@ -817,7 +1348,34 @@ function renderCategories(){
   arr.map(([id,c])=>`<button class="cat ${activeCategory===id?"active":""}" onclick="setCategory('${id}')">${esc(c.name)}</button>`).join("");
 }
 window.setCategory=id=>{ activeCategory=id; renderCategories(); renderProducts(); };
-function finalPrice(p){ const d=Math.max(0,Math.min(100,Number(p.discount||0))); return Math.round(Number(p.price||0)*(1-d/100)); }
+function finalPrice(p){
+  const original = Number(p?.price || 0);
+  const sale = Number(p?.salePrice);
+
+  // المنتجات الجديدة تستخدم السعر بعد الخصم مباشرة.
+  if(Number.isFinite(sale) && sale >= 0 && sale <= original){
+    return Math.round(sale);
+  }
+
+  // دعم المنتجات القديمة التي كانت تعتمد على نسبة الخصم فقط.
+  const d = Math.max(0,Math.min(100,Number(p?.discount||0)));
+  return Math.round(original*(1-d/100));
+}
+
+function calculateDiscountPercent(originalPrice, salePrice){
+  const original = Number(originalPrice || 0);
+  const sale = Number(salePrice || 0);
+
+  if(original <= 0 || sale >= original) return 0;
+
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(((original - sale) / original) * 100)
+    )
+  );
+}
 
 window.renderProducts=()=>{
   const grid=$("productsGrid"); if(!grid) return;
@@ -834,7 +1392,11 @@ window.renderProducts=()=>{
       <div class="product-img"><img src="${esc(p.mainImage||"")}" onerror="this.src='https://placehold.co/600x800?text=GOOSIQ'">
       ${hasDisc?`<span class="discount">-${Number(p.discount)}%</span>`:""}</div>
       <div class="product-body"><div class="product-title">${esc(p.name)}</div>
-      <div class="price"><span class="new-price">${money(fp)} د.ع</span>${hasDisc?`<span class="old-price">${money(p.price)} د.ع</span>`:""}</div>
+      <div class="price">
+        <span class="new-price">${money(fp)} د.ع</span>
+        ${hasDisc?`<span class="old-price">${money(p.price)} د.ع</span>`:""}
+      </div>
+      ${hasDisc?`<div class="saving-badge">وفّري ${money(Number(p.price||0)-fp)} د.ع</div>`:""}
       <div class="product-footer"><span>شاهدي التفاصيل</span><span>←</span></div></div>
     </article>`;
   }).join("");
@@ -855,7 +1417,18 @@ window.openProduct=id=>{
       <div>
         <span class="chip">${esc(categories[p.categoryId]?.name||"بدون فئة")}</span>
         <h2 style="font-size:28px;margin:10px 0">${esc(p.name)}</h2>
-        <div class="price"><span class="new-price" style="font-size:26px">${money(fp)} د.ع</span>${Number(p.discount||0)?`<span class="old-price">${money(p.price)} د.ع</span>`:""}</div>
+        <div class="product-detail-price-box">
+          <div class="price">
+            <span class="new-price">${money(fp)} د.ع</span>
+            ${Number(p.discount||0)?`<span class="old-price">${money(p.price)} د.ع</span>`:""}
+          </div>
+          ${Number(p.discount||0)?`
+            <div class="detail-discount-line">
+              <span class="detail-discount-pill">خصم ${Number(p.discount)}%</span>
+              <span class="detail-saving">وفّري ${money(Number(p.price||0)-fp)} د.ع على هذه القطعة</span>
+            </div>
+          `:""}
+        </div>
         ${p.description?`<p style="line-height:2;color:var(--muted)">${esc(p.description)}</p>`:""}
         <div style="margin:18px 0"><b>اختاري القياس</b><div class="choices" style="margin-top:8px">${sizes.map(x=>`<button class="choice" data-size="${esc(x)}" onclick="pickSize(this,'${esc(x)}')">${esc(x)}</button>`).join("")||"<span class='hint'>سيتم تأكيد القياس معكِ</span>"}</div></div>
         <div style="margin:18px 0"><b>اختاري اللون</b><div class="choices" style="margin-top:8px">${colors.map(x=>`<button class="choice" data-color="${esc(x)}" onclick="pickColor(this,'${esc(x)}')">${esc(x)}</button>`).join("")||"<span class='hint'>سيتم تأكيد اللون معكِ</span>"}</div></div>
@@ -883,52 +1456,170 @@ function subscribeCart(){
   });
 }
 window.openCart=()=>{
-  if(guestMode||!currentUser){ toast("سجلي المتابعة إلى حسابي أولاً لفتح السلة","bad"); setTimeout(()=>openAuth("login"),500); return; }
+  if(guestMode||!currentUser){
+    toast("سجلي المتابعة إلى حسابي أولاً لفتح السلة","bad");
+    setTimeout(()=>openAuth("login"),500);
+    return;
+  }
+
   const items=cart.map(c=>({c,p:products[c.productId]})).filter(x=>x.p);
   const subtotal=items.reduce((a,{c,p})=>a+finalPrice(p)*Number(c.qty||1),0);
   const original=items.reduce((a,{c,p})=>a+Number(p.price||0)*Number(c.qty||1),0);
   const delivery=subtotal>=100000?0:3000;
   const grand=subtotal+delivery;
-  const deposit=Math.ceil(grand*.25);
+  const deposit=calculateDeposit(subtotal);
+  const belowMinimum=subtotal<MIN_ORDER_VALUE;
+  const missing=Math.max(0,MIN_ORDER_VALUE-subtotal);
+
   openModal("سلتكِ",`
-    ${items.length?`<div class="cart-list">${items.map(({c,p})=>`
-      <div class="cart-item">
-        <img src="${esc(p.mainImage||"")}"><div><b>${esc(p.name)}</b><div class="hint">اختاري القياس: ${esc(c.size||"-")} • اختاري اللون: ${esc(c.color||"-")}</div>
-        <div style="margin-top:7px"><button class="btn secondary small" onclick="changeQty('${c.id}',${Math.max(1,Number(c.qty)-1)})">−</button> <span class="pill">${c.qty||1}</span> <button class="btn secondary small" onclick="changeQty('${c.id}',${Number(c.qty||1)+1})">+</button></div></div>
-        <div><b>${money(finalPrice(p)*Number(c.qty||1))} د.ع</b><br><button class="btn danger small" onclick="removeCart('${c.id}')">حذف</button></div>
-      </div>`).join("")}</div>
+    ${items.length?`
+      <div class="cart-list">
+        ${items.map(({c,p})=>`
+          <div class="cart-item">
+            <img src="${esc(p.mainImage||"")}">
+            <div>
+              <b>${esc(p.name)}</b>
+              <div class="hint">اختاري القياس: ${esc(c.size||"-")} • اختاري اللون: ${esc(c.color||"-")}</div>
+              <div style="margin-top:7px">
+                <button class="btn secondary small" onclick="changeQty('${c.id}',${Math.max(1,Number(c.qty)-1)})">−</button>
+                <span class="pill">${c.qty||1}</span>
+                <button class="btn secondary small" onclick="changeQty('${c.id}',${Number(c.qty||1)+1})">+</button>
+              </div>
+            </div>
+            <div>
+              <b>${money(finalPrice(p)*Number(c.qty||1))} د.ع</b><br>
+              <button class="btn danger small" onclick="removeCart('${c.id}')">حذف</button>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+
+      ${belowMinimum?`
+        <div class="minimum-order-alert">
+          <b>الحد الأدنى للطلب هو 25,000 د.ع</b>
+          <span>أضيفي منتجات بقيمة ${money(missing)} د.ع على الأقل لإتمام الطلب.</span>
+        </div>
+      `:""}
+
       <div class="summary" style="margin-top:16px">
         <div class="sum-row"><span>قبل الخصم</span><b>${money(original)} د.ع</b></div>
         <div class="sum-row"><span>بعد الخصم</span><b>${money(subtotal)} د.ع</b></div>
         <div class="sum-row"><span>الشحن من المتجر</span><b>مجاناً</b></div>
         <div class="sum-row"><span>التوصيل إلى بابكِ</span><b>${delivery?money(delivery)+" د.ع":"مجاناً"}</b></div>
         <div class="sum-row total"><span>الإجمالي النهائي</span><b>${money(grand)} د.ع</b></div>
-        <div class="sum-row"><span>العربون المطلوب الآن</span><b style="color:var(--brand)">${money(deposit)} د.ع</b></div>
+        <div class="sum-row">
+          <span>العربون المطلوب</span>
+          <b style="color:var(--brand)">${money(deposit)} د.ع</b>
+        </div>
+        <div class="deposit-rule-note">كل 25,000 د.ع من قيمة المنتجات يقابلها 5,000 د.ع عربون.</div>
       </div>
-      <button class="btn primary" style="width:100%;margin-top:14px" onclick="openCheckout()">متابعة إلى التوصيل إلى بابكِ</button>`:`<div class="empty">سلتكِ بانتظار اختياراتكِ الجميلة.</div>`}
+
+      ${belowMinimum
+        ? `<button class="btn primary disabled-order-btn" style="width:100%;margin-top:14px" disabled>الطلب يبدأ من 25,000 د.ع</button>`
+        : `<button class="btn primary" style="width:100%;margin-top:14px" onclick="openCheckout()">متابعة إلى التوصيل إلى بابكِ</button>`
+      }
+    `:`<div class="empty">سلتكِ بانتظار اختياراتكِ الجميلة.</div>`}
   `);
 };
 window.changeQty=async(id,q)=>{ await update(ref(db,`carts/${uid()}/${id}`),{qty:Math.max(1,q)}); openCart(); };
 window.removeCart=async id=>{ await remove(ref(db,`carts/${uid()}/${id}`)); openCart(); };
 
 window.openCheckout=()=>{
-  const items=cart.map(c=>({c,p:products[c.productId]})).filter(x=>x.p); if(!items.length) return;
+  const items=cart.map(c=>({c,p:products[c.productId]})).filter(x=>x.p);
+  if(!items.length) return;
+
   const subtotal=items.reduce((a,{c,p})=>a+finalPrice(p)*Number(c.qty||1),0);
-  const delivery=subtotal>=100000?0:3000, grand=subtotal+delivery, deposit=Math.ceil(grand*.25);
+
+  if(subtotal<MIN_ORDER_VALUE){
+    const missing=MIN_ORDER_VALUE-subtotal;
+    toast(`الحد الأدنى للطلب 25,000 د.ع. أضيفي ${money(missing)} د.ع لإتمام الطلب.`,"bad");
+    return;
+  }
+
+  const delivery=subtotal>=100000?0:3000;
+  const grand=subtotal+delivery;
+  const deposit=calculateDeposit(subtotal);
+
   openModal("تأكيد طلبي",`
     <form id="checkoutForm" class="form">
-      <div class="hint">لإتمام الحجز، يتم دفع 25% فقط من قيمة الطلب كعربون، وسيتم توضيح بقية الخطوات لكِ بكل سهولة.</div>
+      <div class="checkout-rule-card">
+        <b>نظام العربون</b>
+        <span>كل 25,000 د.ع من قيمة المنتجات يقابلها عربون قدره 5,000 د.ع.</span>
+      </div>
+
       <div class="grid2">
-        <div class="field"><label>المحافظة</label><select id="coProvince" class="input" required>${PROVINCES.map(x=>`<option ${x===currentProfile?.province?"selected":""}>${x}</option>`).join("")}</select></div>
+        <div class="field">
+          <label>المحافظة</label>
+          <select id="coProvince" class="input" required>
+            ${PROVINCES.map(x=>`<option ${x===currentProfile?.province?"selected":""}>${x}</option>`).join("")}
+          </select>
+        </div>
         <div class="field"><label>عنوان التوصيل</label><input id="coAddress" class="input" required value="${esc(currentProfile?.address||"")}"></div>
         <div class="field"><label>رقم الهاتف الأساسي</label><input id="coPhone1" class="input" required maxlength="11" value="${esc(currentProfile?.phone1||"")}"></div>
         <div class="field"><label>رقم إضافي</label><input id="coPhone2" class="input" maxlength="11" value="${esc(currentProfile?.phone2||"")}"></div>
       </div>
-      <div class="summary"><div class="sum-row total"><span>الإجمالي النهائي</span><b>${money(grand)} د.ع</b></div><div class="sum-row"><span>العربون المطلوب الآن</span><b>${money(deposit)} د.ع</b></div></div>
-      <label style="display:flex;gap:8px;align-items:flex-start"><input id="depositConfirm" type="checkbox" required> أؤكد اطلاعي على قيمة العربون المطلوبة لإكمال طلبي.</label>
+
+      <div class="summary">
+        <div class="sum-row"><span>قيمة المنتجات بعد الخصم</span><b>${money(subtotal)} د.ع</b></div>
+        <div class="sum-row"><span>التوصيل</span><b>${delivery?money(delivery)+" د.ع":"مجاناً"}</b></div>
+        <div class="sum-row total"><span>الإجمالي النهائي</span><b>${money(grand)} د.ع</b></div>
+        <div class="sum-row"><span>العربون المطلوب الآن</span><b>${money(deposit)} د.ع</b></div>
+      </div>
+
+      <details class="return-policy-box">
+        <summary>📦 قراءة سياسة التعويض والاسترجاع</summary>
+        ${getReturnPolicyHTML()}
+      </details>
+
+      <label class="policy-confirm">
+        <input id="depositConfirm" type="checkbox" required>
+        <span>أؤكد اطلاعي على قيمة العربون وسياسة التعويض والاسترجاع قبل تأكيد الطلب.</span>
+      </label>
+
       <button class="btn primary" type="submit">تأكيد طلبي</button>
-    </form>`);
-  $("checkoutForm").addEventListener("submit",async e=>{ e.preventDefault(); await placeOrder(); });
+    </form>
+  `);
+
+  $("checkoutForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    await placeOrder();
+  });
+};
+
+
+function getReturnPolicyHTML(){
+  return `
+    <div class="return-policy-content">
+      <h3>📦 سياسة التعويض والاسترجاع</h3>
+      <p>حرصًا منا على حفظ حقوقك وتقديم أفضل خدمة ممكنة، نوضح لك سياسة التعويض والاسترجاع الخاصة بالطلبات:</p>
+
+      <div class="policy-item">
+        <b>1️⃣ في حال وجود قطعة مفقودة</b>
+        <p>إذا استلمت طلبك واكتشفت وجود قطعة مفقودة، فسيتم <strong>تعويضك بقيمة القطعة المفقودة كاملة</strong> خلال مدة لا تتجاوز <strong>24 ساعة</strong>.</p>
+      </div>
+
+      <div class="policy-item">
+        <b>2️⃣ في حال اختلاف القياس أو اللون</b>
+        <p>إذا وصلتك قطعة <strong>بقياس مختلف عن القياس الذي طلبته، أو بلون مختلف عن اللون المحدد في طلبك</strong>، فسيتم <strong>تعويضك بقيمة القطعة كاملة</strong> خلال مدة لا تتجاوز <strong>24 ساعة</strong>.</p>
+      </div>
+
+      <div class="policy-item">
+        <b>3️⃣ في حال وصول الطلب مطابقًا لطلبك</b>
+        <p>إذا وصل طلبك <strong>بالقياسات والألوان التي اخترتها تمامًا</strong>، فلا يُسمح برفض الطلب أو طلب إرجاعه بسبب عدم الرغبة به. وفي حال رفض استلام الطلب رغم مطابقته للطلب المسجل، <strong>سيتم حجز قيمة العربون</strong> إلى حين استلام الطلب من قبل الزبون.</p>
+      </div>
+
+      <div class="policy-item warning-policy">
+        <b>4️⃣ ⚠️ تأكد قبل تأكيد الطلب</b>
+        <p>يرجى الانتباه جيدًا عند اختيار <strong>القياسات والألوان</strong>، لأن <strong>لا يمكن تغييرها بعد انتقال حالة الطلب إلى “تم الشراء”</strong>.</p>
+      </div>
+
+      <p class="policy-note"><b>💛 ملاحظة:</b> يرجى مراجعة تفاصيل طلبك بعناية قبل تأكيده، لضمان وصول طلبك بالشكل الذي اخترته.</p>
+    </div>
+  `;
+}
+
+window.openReturnPolicy=()=>{
+  openModal("سياسة التعويض والاسترجاع", getReturnPolicyHTML());
 };
 
 
@@ -968,7 +1659,13 @@ async function placeOrder(){
   }).filter(Boolean);
   const subtotal=lineItems.reduce((a,x)=>a+x.unitPrice*x.qty,0);
   const originalSubtotal=lineItems.reduce((a,x)=>a+x.originalUnitPrice*x.qty,0);
-  const delivery=subtotal>=100000?0:3000, total=subtotal+delivery, deposit=Math.ceil(total*.25);
+  if(subtotal<MIN_ORDER_VALUE){
+    return toast("لا يمكن إنشاء طلب بقيمة أقل من 25,000 د.ع","bad");
+  }
+
+  const delivery=subtotal>=100000?0:3000;
+  const total=subtotal+delivery;
+  const deposit=calculateDeposit(subtotal);
   const orderId=push(ref(db,"orders")).key, orderNumber=generateOrderNumber();
   const order={id:orderId,orderNumber,userId:uid(),customerName:currentProfile.name,username:currentProfile.username,phone1,phone2,province,address,items:lineItems,originalSubtotal,subtotal,shipping:0,delivery,total,depositRequired:deposit,depositPaid:0,paymentStatus:"بانتظار إكمال إجراءات العربون عبر الموظف",status:"قيد المعالجة",createdAt:Date.now(),updatedAt:Date.now()};
   const updates={};
@@ -987,7 +1684,7 @@ async function placeOrder(){
     await remove(ref(db,`carts/${uid()}`));
     currentProfile={...currentProfile,province,address,phone2};
 
-    // مستمع userOrders سيعرض الطلب فوراً وبشكل ثابت.
+    // قائمة طلباتي ستتحدث مباشرةً من قاعدة البيانات.
 
     openModal("طلبكِ أصبح معنا 🤍",`
     <div style="text-align:center;padding:24px">
@@ -1121,7 +1818,7 @@ function renderMyOrdersArray(arr){
         </div>` : ""}
 
         <div class="order-card-footer">
-          <span class="order-payment-note">${esc(o.paymentStatus||"يمكنكِ متابعة جميع تفاصيل الطلب من هنا")}</span>
+          <span class="order-payment-note">${o.status==="قيد المعالجة" ? esc(o.paymentStatus||"بانتظار إكمال إجراءات العربون عبر الموظف") : ""}</span>
           <button class="order-view-btn" onclick="showUserOrderDetails('${esc(o.id||"")}')">عرض التفاصيل</button>
         </div>
       </article>`;
@@ -1260,8 +1957,13 @@ window.showUserOrderDetails=async(id)=>{
         <div class="sum-row"><span>الشحن</span><b>مجاني</b></div>
         <div class="sum-row"><span>التوصيل</span><b>${order.delivery?money(order.delivery)+" د.ع":"مجاني"}</b></div>
         <div class="sum-row total"><span>الإجمالي</span><b>${money(order.total)} د.ع</b></div>
-        <div class="sum-row"><span>العربون المطلوب</span><b>${money(order.depositRequired)} د.ع</b></div>
-        <div class="sum-row"><span>المبلغ المدفوع</span><b>${money(order.depositPaid||0)} د.ع</b></div>
+        <div class="sum-row"><span>العربون</span><b>${money(order.depositRequired)} د.ع</b></div>
+        ${isPurchasedOrLater(order.status)?`
+          <div class="sum-row remaining-row">
+            <span>السعر المتبقي بعد خصم العربون</span>
+            <b>${money(remainingAfterDeposit(order))} د.ع</b>
+          </div>
+        `:""}
       </div>
     `);
 
@@ -1451,38 +2153,199 @@ window.showOrderDetails=(id,isAdmin)=>{
       </div>
       <h3>المنتجات</h3>
       <div class="cart-list">${(order.items||[]).map(x=>`<div class="cart-item"><img src="${esc(x.image||"")}"><div><b>${esc(x.name)}</b><div class="hint">اختاري القياس: ${esc(x.size||"-")} • اختاري اللون: ${esc(x.color||"-")} • الكمية: ${x.qty}</div></div><b>${money(x.unitPrice*x.qty)} د.ع</b></div>`).join("")}</div>
-      <div class="summary" style="margin-top:14px"><div class="sum-row"><span>قبل الخصم</span><b>${money(order.originalSubtotal)} د.ع</b></div><div class="sum-row"><span>بعد الخصم</span><b>${money(order.subtotal)} د.ع</b></div><div class="sum-row"><span>الشحن من المتجر</span><b>مجاناً</b></div><div class="sum-row"><span>التوصيل إلى بابكِ</span><b>${order.delivery?money(order.delivery)+" د.ع":"مجاناً"}</b></div><div class="sum-row total"><span>الإجمالي النهائي</span><b>${money(order.total)} د.ع</b></div><div class="sum-row"><span>العربون المطلوب</span><b>${money(order.depositRequired)} د.ع</b></div><div class="sum-row"><span>المبلغ المدفوع</span><b>${money(order.depositPaid||0)} د.ع</b></div></div>
+      <div class="summary" style="margin-top:14px">
+        <div class="sum-row"><span>قبل الخصم</span><b>${money(order.originalSubtotal)} د.ع</b></div>
+        <div class="sum-row"><span>بعد الخصم</span><b>${money(order.subtotal)} د.ع</b></div>
+        <div class="sum-row"><span>الشحن من المتجر</span><b>مجاناً</b></div>
+        <div class="sum-row"><span>التوصيل إلى بابكِ</span><b>${order.delivery?money(order.delivery)+" د.ع":"مجاناً"}</b></div>
+        <div class="sum-row total"><span>الإجمالي النهائي</span><b>${money(order.total)} د.ع</b></div>
+        <div class="sum-row"><span>العربون</span><b>${money(order.depositRequired)} د.ع</b></div>
+        ${isPurchasedOrLater(order.status)?`
+          <div class="sum-row remaining-row">
+            <span>السعر المتبقي بعد خصم العربون</span>
+            <b>${money(remainingAfterDeposit(order))} د.ع</b>
+          </div>
+        `:""}
+      </div>
     `);
   };show();
 };
 
 window.openProductEditor=(id="")=>{
   const p=id?products[id]:{};
+  const originalPrice = Number(p.price||0);
+  const currentSalePrice = id ? finalPrice(p) : 0;
+  const currentDiscount = calculateDiscountPercent(originalPrice,currentSalePrice);
+
   openModal(id?"تعديل المنتج":"إضافة منتج",`<form id="productForm" class="form">
-    <div class="field"><label>اسم المنتج</label><input id="peName" class="input" required value="${esc(p.name||"")}"></div>
-    <div class="field"><label>رابط الصورة الرئيسية</label><input id="peMain" class="input" required value="${esc(p.mainImage||"")}"></div>
-    <div class="field"><label>روابط الصور الفرعية</label><textarea id="peImages" class="input" rows="4" placeholder="رابط في كل سطر">${esc((p.images||[]).join("\n"))}</textarea><div class="hint">يمكن إدخال عدد غير محدود، رابط واحد في كل سطر.</div></div>
-    <div class="grid2">
-      <div class="field"><label>السعر</label><input id="pePrice" type="number" min="0" class="input" required value="${Number(p.price||0)}"></div>
-      <div class="field"><label>الخصم %</label><input id="peDiscount" type="number" min="0" max="100" class="input" value="${Number(p.discount||0)}"></div>
-      <div class="field"><label>اختاري القياسات</label><input id="peSizes" class="input" placeholder="S, M, L, XL" value="${esc((p.sizes||[]).join(", "))}"></div>
-      <div class="field"><label>الألوان</label><input id="peColors" class="input" placeholder="أسود، وردي..." value="${esc((p.colors||[]).join(", "))}"></div>
-      <div class="field"><label>الفئة</label><select id="peCategory" class="input" required>${Object.entries(categories).map(([cid,c])=>`<option value="${cid}" ${p.categoryId===cid?"selected":""}>${esc(c.name)}</option>`).join("")}</select></div>
+    <div class="field">
+      <label>اسم المنتج</label>
+      <input id="peName" class="input" required value="${esc(p.name||"")}">
     </div>
-    <div class="field"><label>الوصف</label><textarea id="peDescription" class="input" rows="3">${esc(p.description||"")}</textarea></div>
+
+    <div class="field">
+      <label>رابط الصورة الرئيسية</label>
+      <input id="peMain" class="input" required value="${esc(p.mainImage||"")}">
+    </div>
+
+    <div class="field">
+      <label>روابط الصور الفرعية</label>
+      <textarea id="peImages" class="input" rows="4" placeholder="رابط في كل سطر">${esc((p.images||[]).join("\n"))}</textarea>
+      <div class="hint">يمكن إدخال عدد غير محدود، رابط واحد في كل سطر.</div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>السعر قبل الخصم</label>
+        <input id="pePrice" type="number" min="1" class="input" required value="${originalPrice||""}" placeholder="مثال: 50,000">
+      </div>
+
+      <div class="field">
+        <label>السعر بعد الخصم</label>
+        <input id="peSalePrice" type="number" min="0" class="input" required value="${currentSalePrice||""}" placeholder="مثال: 40,000">
+      </div>
+    </div>
+
+    <div id="autoDiscountPreview" class="auto-discount-preview">
+      <div>
+        <span>الخصم المحسوب تلقائياً</span>
+        <b id="autoDiscountPercent">${currentDiscount}%</b>
+      </div>
+      <div>
+        <span>قيمة التوفير</span>
+        <b id="autoSavingAmount">${money(Math.max(0,originalPrice-currentSalePrice))} د.ع</b>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>القياسات</label>
+        <input id="peSizes" class="input" placeholder="S, M, L, XL" value="${esc((p.sizes||[]).join(", "))}">
+      </div>
+
+      <div class="field">
+        <label>الألوان</label>
+        <input id="peColors" class="input" placeholder="أسود، وردي..." value="${esc((p.colors||[]).join(", "))}">
+      </div>
+
+      <div class="field">
+        <label>الفئة</label>
+        <select id="peCategory" class="input" required>
+          ${Object.entries(categories).map(([cid,c])=>`<option value="${cid}" ${p.categoryId===cid?"selected":""}>${esc(c.name)}</option>`).join("")}
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>الوصف</label>
+      <textarea id="peDescription" class="input" rows="3">${esc(p.description||"")}</textarea>
+    </div>
+
     <button class="btn primary">حفظ المنتج</button>
   </form>`);
+
+  const updateDiscountPreview=()=>{
+    const original=Number($("pePrice").value||0);
+    const sale=Number($("peSalePrice").value||0);
+    const discount=calculateDiscountPercent(original,sale);
+    const saving=Math.max(0,original-sale);
+
+    $("autoDiscountPercent").textContent=`${discount}%`;
+    $("autoSavingAmount").textContent=`${money(saving)} د.ع`;
+
+    const preview=$("autoDiscountPreview");
+    preview.classList.toggle("invalid-price", sale>original && original>0);
+  };
+
+  $("pePrice").addEventListener("input",updateDiscountPreview);
+  $("peSalePrice").addEventListener("input",updateDiscountPreview);
+  updateDiscountPreview();
+
   $("productForm").onsubmit=async e=>{
     e.preventDefault();
-    const data={name:$("peName").value.trim(),mainImage:$("peMain").value.trim(),images:$("peImages").value.split(/\n+/).map(x=>x.trim()).filter(Boolean),price:Number($("pePrice").value),discount:Number($("peDiscount").value||0),sizes:$("peSizes").value.split(",").map(x=>x.trim()).filter(Boolean),colors:$("peColors").value.split(/[,،]/).map(x=>x.trim()).filter(Boolean),categoryId:$("peCategory").value,description:$("peDescription").value.trim(),updatedAt:Date.now()};
-    if(id) await update(ref(db,`products/${id}`),data); else {const key=push(ref(db,"products")).key;await set(ref(db,`products/${key}`),{...data,id:key,createdAt:Date.now()});}
-    toast("تم حفظ المنتج","ok");closeModal();
+
+    const originalPrice=Number($("pePrice").value);
+    const salePrice=Number($("peSalePrice").value);
+
+    if(!Number.isFinite(originalPrice) || originalPrice<=0)
+      return toast("أدخل سعراً صحيحاً قبل الخصم","bad");
+
+    if(!Number.isFinite(salePrice) || salePrice<0)
+      return toast("أدخل سعراً صحيحاً بعد الخصم","bad");
+
+    if(salePrice>originalPrice)
+      return toast("السعر بعد الخصم لا يمكن أن يكون أكبر من السعر الأصلي","bad");
+
+    const discount=calculateDiscountPercent(originalPrice,salePrice);
+
+    const data={
+      name:$("peName").value.trim(),
+      mainImage:$("peMain").value.trim(),
+      images:$("peImages").value.split(/\n+/).map(x=>x.trim()).filter(Boolean),
+      price:originalPrice,
+      salePrice:salePrice,
+      discount:discount,
+      sizes:$("peSizes").value.split(",").map(x=>x.trim()).filter(Boolean),
+      colors:$("peColors").value.split(/[,،]/).map(x=>x.trim()).filter(Boolean),
+      categoryId:$("peCategory").value,
+      description:$("peDescription").value.trim(),
+      updatedAt:Date.now()
+    };
+
+    if(id){
+      await update(ref(db,`products/${id}`),data);
+    }else{
+      const key=push(ref(db,"products")).key;
+      await set(ref(db,`products/${key}`),{
+        ...data,
+        id:key,
+        createdAt:Date.now()
+      });
+    }
+
+    toast(`تم حفظ المنتج • الخصم ${discount}%`,"ok");
+    closeModal();
   };
 };
 function renderAdminProducts(){
   if(!$("adminProductsTable"))return;
   const arr=Object.entries(products);
-  $("adminProductsTable").innerHTML=arr.length?`<div class="table-wrap"><table class="table"><thead><tr><th>المنتج</th><th>الفئة</th><th>السعر</th><th>الخصم</th><th>اختاري القياسات</th><th>إجراءات</th></tr></thead><tbody>${arr.map(([id,p])=>`<tr><td>${esc(p.name)}</td><td>${esc(categories[p.categoryId]?.name||"-")}</td><td>${money(p.price)} د.ع</td><td>${Number(p.discount||0)}%</td><td>${esc((p.sizes||[]).join(", "))}</td><td><button class="btn secondary small" onclick="openProductEditor('${id}')">تعديل</button> <button class="btn danger small" onclick="deleteProduct('${id}')">حذف</button></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">لا توجد منتجات.</div>`;
+
+  $("adminProductsTable").innerHTML=arr.length?`
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>المنتج</th>
+            <th>الفئة</th>
+            <th>قبل الخصم</th>
+            <th>بعد الخصم</th>
+            <th>الخصم</th>
+            <th>القياسات</th>
+            <th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${arr.map(([id,p])=>{
+            const fp=finalPrice(p);
+            const d=calculateDiscountPercent(Number(p.price||0),fp);
+            return `<tr>
+              <td>${esc(p.name)}</td>
+              <td>${esc(categories[p.categoryId]?.name||"-")}</td>
+              <td><span class="admin-old-price">${money(p.price)} د.ع</span></td>
+              <td><b>${money(fp)} د.ع</b></td>
+              <td><span class="admin-discount-pill">${d}%</span></td>
+              <td>${esc((p.sizes||[]).join(", "))}</td>
+              <td>
+                <button class="btn secondary small" onclick="openProductEditor('${id}')">تعديل</button>
+                <button class="btn danger small" onclick="deleteProduct('${id}')">حذف</button>
+              </td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `:`<div class="empty">لا توجد منتجات.</div>`;
 }
 window.deleteProduct=async id=>{if(confirm("حذف المنتج نهائياً؟"))await remove(ref(db,`products/${id}`));};
 window.addCategory=async()=>{
